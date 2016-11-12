@@ -1,0 +1,13 @@
+{
+  "development":{
+    "PORT":3005,
+    "database":"scaffold_development"
+  },
+  "production":{
+    "PORT":4000,
+    "database":"scaffold_development"
+  },
+  "views":{
+    "title":"¡Scaffold!"
+  }
+}
