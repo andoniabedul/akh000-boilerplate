@@ -1,0 +1,14 @@
+<% include ./layout %>
+  <h1> Register page</h1>
+  <p class="lead">
+    Registrate en la página
+  </p>
+  <form class="form-group" action="/register" method="post">
+    <input type="text" name="username" placeholder="Enter Username">
+    <input type="password" name="password" placeholder="Enter password">
+    <button type="submit" class="btn btn-default" name="button"> Submit</button>
+    <a href="/">
+      <button type="button" class="btn btn-primary" name="button">Cancel</button>
+    </a>
+  </form>
+<% include ./footer %>
