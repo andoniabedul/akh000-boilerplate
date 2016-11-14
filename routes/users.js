@@ -131,9 +131,12 @@ router.post('/login', function(req,res,next){
 
 router.get('/logout', function(req, res) {
     req.logout();
-    res.render('users/login');
+    res.render('users/login', {username: ''});
 });
 
+router.get('/profile', function(req, res){
+  res.render('users/profile', {user: req.user});
+})
 router.get('/ping', function(req, res){
     res.status(200).send("pong!");
 });

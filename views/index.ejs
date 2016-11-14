@@ -1,10 +1,5 @@
 <% include ./layout %>
-  <% if(!user) { %>
-    <a href="users/login">Login</a>
-    <a href="users/register">Register</a>
-  <% } %>
-  <% if(user) { %>
-    <p> You are currently logged in as <%= user.username %> </p>
-    <a href="users/logout"> Logout </a>
-  <% } %>
+  <div class="row">
+    <p> This is your dashboard </p>
+  </div>
 <% include ./footer %>

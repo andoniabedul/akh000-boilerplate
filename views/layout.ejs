@@ -22,11 +22,13 @@
             </button>
           </div>
             <ul class="nav navbar-nav navbar-collapse collapse" id='menu'>
-              <% if(user === undefined || user === null || user === '') {%>
-                <li><a href="/users/register">Register</a></li>
-                <li><a href="/users/login">Login</a></li>
-              <% } else { %>
-                <li><a href="/users/logout">Logout</a></li>
+              <% if(!user) { %>
+                <a href="users/login">Login</a>
+                <a href="users/register">Register</a>
+              <% } %>
+              <% if(user) { %>
+                <li><a href="/users/profile">Profile, <%= user.username %></a></li>
+                <li><a href="/users/logout"> Logout </a></li>
               <% } %>
               <li><a href="#">#</a></li>
             </ul>
