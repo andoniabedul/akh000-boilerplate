@@ -23,26 +23,19 @@ module.exports.create = function(newUser, callback){
     });
   });
 };
+
 module.exports.updateInfo = function(user, params, callback){
   var u = user.user;
   var p = params.params;
-  var info = {};
-  console.log("p: " + JSON.stringify(p));
-  console.log("u: " + JSON.stringify(u));
   if(u.username !== p.username){
-    console.log("username");
     u.username = p.username;
   } if(u.name !== p.name){
-    console.log("name");
     u.name = p.name;
   } if(u.lastname !== p.lastname){
-    console.log("lastname");
     u.lastname = p.lastname;
   } if(u.email !== p.email){
-    console.log("email");
     u.email = p.email;
   }
-  console.log("info: " + JSON.stringify(info));
   User.findOne({username: u.username}, function(data){
     u.save(callback);
   });

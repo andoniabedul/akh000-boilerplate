@@ -8,7 +8,6 @@ const User = require('../model/user');
 
 
 router.get('/', ensureAuthenticated,function (req, res) {
-    console.log("index");
     res.render('index', { user : req.user });
 });
 

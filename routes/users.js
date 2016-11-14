@@ -131,7 +131,7 @@ router.post('/login', function(req,res,next){
 
 router.get('/logout', function(req, res) {
     req.logout();
-    res.render('users/login', {username: ''});
+    res.render('users/login', {username: '', success_msg: 'Loggout successfully.'});
 });
 
 router.get('/profile', ensureAuthenticated, function(req, res){
