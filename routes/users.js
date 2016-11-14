@@ -67,10 +67,11 @@ router.post('/register', function(req, res) {
 
 router.get('/login', function(req, res) {
     var message = "";
+    var username = '';
     console.log(req.query.username);
     console.log(req.query.msg_registredUser);
     if(req.query.username !== '' && req.query.username !== undefined){
-      var username = decodeURIComponent(req.query.username);
+      username = decodeURIComponent(req.query.username);
       if(req.query.msg_registredUser !== '' && req.query.msg_registredUser !== undefined){
         message = "Successfulyy create user";
         res.render('users/login', {success_msg: message , username : username });
@@ -130,7 +131,7 @@ router.post('/login', function(req,res,next){
 
 router.get('/logout', function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.render('users/login');
 });
 
 router.get('/ping', function(req, res){

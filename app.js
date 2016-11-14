@@ -64,14 +64,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // FLASH MESSAGES
 app.use(function(req, res, next){
-  res.locals.success_msg = '';
-  res.locals.error_msg = '';
-  res.locals.error = '';
+  res.locals.success_msg = ''; // SUCCESSFULLY MESSAGES
+  res.locals.error_msg = ''; // SINGLE ERROR
+  res.locals.errors = ''; // MULTIPLE ERRORS
+  res.locals.user = '';
   next();
 })
+
 // ROUTES
 app.use('/', routes);
 app.use('/users', users);
+
 
 
 // passport config

@@ -22,9 +22,12 @@
             </button>
           </div>
             <ul class="nav navbar-nav navbar-collapse collapse" id='menu'>
-              <li><a href="/users/register">Register</a></li>
-              <li><a href="/users/login">Login</a></li>
-              <li><a href="/users/logout">Logout</a></li>
+              <% if(user === undefined || user === null || user === '') {%>
+                <li><a href="/users/register">Register</a></li>
+                <li><a href="/users/login">Login</a></li>
+              <% } else { %>
+                <li><a href="/users/logout">Logout</a></li>
+              <% } %>
               <li><a href="#">#</a></li>
             </ul>
           </div>
