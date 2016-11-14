@@ -1,3 +1,43 @@
 <% include ../layout %>
-  <p> Welcome, <%= user.username %> </p>
+  <h3> Welcome, <%= user.username %> </h3>
+  <div class="form-group">
+    <form id="editForm" action="profile" method="POST">
+      <label for="username">Username: </label>
+      <input type="text" name="username" value="<%= user.username %>" class="form-control" disabled>
+      <label for="name">Name: </label>
+      <input type="text" name="name" value="<%= user.name %>" class="form-control" disabled>
+      <label for="lastname">Lastname: </label>
+      <input type="text" name="lastname" value="<%= user.lastname %>" class="form-control" disabled>
+      <label for="lastname">Email: </label>
+      <input type="text" name="email" value="<%= user.email %>" class="form-control" disabled>
+      <br>
+      <button class="btn btn-default" id="info" type="button" name="Edit">Edit</button>
+    </form>
+    <hr>
+    <form id="passwordForm" action="profile" method="POST">
+      <label for="password">Old password: </label>
+      <input type="password" name="oldPassword" class="form-control" disabled>
+      <label for="newPassword1">New password: </label>
+      <input type="password" name="newPassword1" class="form-control" disabled>
+      <label for="newPassword2">Repeat the new password: </label>
+      <input type="password" name="newPassword2" class="form-control" disabled>
+      <br>
+      <button class="btn btn-default" id="password" type="button" name="Edit">Edit</button>
+    </form>
+  </div>
 <% include ../footer %>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#info').on('click', function(){
+    $('#info').hide();
+    $('#editForm').append('<button class="btn btn-success" type="submit" id="submit" name="info">Submit</button>');
+    $('#editForm input').removeAttr('disabled');
+  })
+  $('#password').on('click',function(){
+    $('#password').hide();
+    $('#passwordForm').append('<button class="btn btn-success" type="submit" id="submit" name="password">Submit</button>');
+    $('#passwordForm input').removeAttr('disabled');
+  });
+});
+</script>

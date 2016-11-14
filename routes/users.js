@@ -134,11 +134,37 @@ router.get('/logout', function(req, res) {
     res.render('users/login', {username: ''});
 });
 
-router.get('/profile', function(req, res){
+router.get('/profile', ensureAuthenticated, function(req, res){
   res.render('users/profile', {user: req.user});
-})
+});
+
+router.post('/profile', ensureAuthenticated, function(req,res){
+    var username = req.body.username;
+    var name = req.body.name;
+    var lastname = req.body.lastname;
+    var email = req.body.email;
+    params = {
+      username: username,
+      name: name,
+      lastname: lastname,
+      email: email
+    }
+    User.updateInfo({user: req.user},{params}, function(user){
+      res.render('users/profile', {user: req.user, success_msg: 'Información salvada exitosamente'});
+    })
+});
+
 router.get('/ping', function(req, res){
     res.status(200).send("pong!");
 });
+
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()){
+    console.log("auth");
+    return next();
+  } else {
+    res.render('users/login', {username:'', error_msg: 'Debes estar logueado'});
+  }
+}
 
 module.exports = router;
