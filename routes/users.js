@@ -31,7 +31,7 @@ router.post('/register', function(req, res) {
     var errors = req.validationErrors();
     if (errors) {
       res.render('users/register', {
-        error_msg: errors
+        errors: errors
       });
     } else {
       User.getUserByUsername(username, function(err,checkUser){

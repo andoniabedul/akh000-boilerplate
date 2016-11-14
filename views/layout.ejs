@@ -37,6 +37,13 @@
     <% if (error_msg !== '' && error_msg !== null && error_msg !== undefined && error_msg !== NaN) { %>
       <div class="alert alert-danger"> <%= error_msg %> </div>
     <% } %>
-    <% if (error !== '' && error !== null && error !== undefined && error !== NaN) { %>
-      <div class="alert alert-danger"> <%= error %> </div>
+    <% if (errors !== '' && errors !== null && errors !== undefined && errors !== NaN) { %>
+      <div class="alert alert-danger">
+        There are <%= errors.length %> errors :
+        <ul>
+        <% for (var z=0; z < errors.length; z++){ %>
+          <li> <%= errors[z].msg %> </li>
+        <% } %>
+       </ul>
+      </div>
     <% } %>
