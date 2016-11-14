@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "~1.13.2",
     "bower": "^1.8.0",
     "connect-flash": "^0.1.1",
@@ -14,6 +15,7 @@
     "ejs": "~2.3.3",
     "express": "~4.13.1",
     "express-session": "^1.14.2",
+    "express-validator": "^2.21.0",
     "mongoose": "^4.6.7",
     "morgan": "~1.6.1",
     "nconf": "^0.8.4",

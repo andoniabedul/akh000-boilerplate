@@ -1,10 +1,10 @@
 <% include ./layout %>
   <% if(!user) { %>
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
+    <a href="users/login">Login</a>
+    <a href="users/register">Register</a>
   <% } %>
   <% if(user) { %>
     <p> You are currently logged in as <%= user.username %> </p>
-    <a href="/logout"> Logout </a>
+    <a href="users/logout"> Logout </a>
   <% } %>
 <% include ./footer %>

@@ -1,0 +1,23 @@
+<% include ../layout %>
+  <h1>Register page</h1>
+  <form action="/users/register" method="post">
+    <div class="form-group">
+      <label for="username">Username: </label>
+      <input type="text" name="username" placeholder="Enter Username" class="form-control">
+      <label for="email">Email: </label>
+      <input type="text" name="email" placeholder="Enter your mail" class="form-control">
+      <label for="password1">Password: </label>
+      <input type="password" name="password1" placeholder="Enter password" class="form-control">
+      <label for="password2">Repeat your password: </label>
+      <input type="password" name="password2" placeholder="Verify password" class="form-control">
+      <label for="name">Name: </label>
+      <input type="text" name="name" placeholder="Name" class="form-control">
+      <label for="lastname">Lastname: </label>
+      <input type="text" name="lastname" placeholder="Lastname" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-success" name="button"> Register </button>
+    <a href="/">
+      <button type="button" class="btn btn-primary" name="button">Cancel</button>
+    </a>
+  </form>
+<% include ../footer %>
