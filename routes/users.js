@@ -5,8 +5,20 @@ const expressValidator = require('express-validator');
 const router = express.Router();
 const flash = require('connect-flash');
 const User = require('../model/user');
+const nconf = require('nconf');
+nconf.file('./config/data.json');
 
+// CHECK IF IS AUTHENTICATED
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()){
+    console.log("auth");
+    return next();
+  } else {
+    res.render('users/login', {username:'', error_msg: 'Debes estar logueado'});
+  }
+}
 
+// REGISTER USERS BY USERNAME
 router.get('/register', function(req, res) {
     res.render('users/register');
 });
@@ -46,12 +58,12 @@ router.post('/register', function(req, res) {
               name: name,
               lastname: lastname
             })
-            return done(null, false, { success_msg: 'Username available!' });
+            //return done(null, false, { success_msg: 'Username available!' });
             User.create(newUser, function(err,user){
               if(err){
                 console.log("Error creating user: " + err);
               }
-              res.redirect('login?username='+ encodeURIComponent(username) + '&msg_registredUser=true');
+              res.redirect('login?username='+ encodeURIComponent(username));
             });
           } else {
             res.render('users/register', {
@@ -65,24 +77,33 @@ router.post('/register', function(req, res) {
     }
 });
 
+// LOGIN USERS BY USERNAME
 router.get('/login', function(req, res) {
     var message = "";
     var username = '';
-    console.log(req.query.username);
-    console.log(req.query.msg_registredUser);
-    if(req.query.username !== '' && req.query.username !== undefined){
+    if(req.headers.referer === nconf.get('development:server')+'users/register' && req.query.username !== undefined){
+      message = "Successfulyy create user";
       username = decodeURIComponent(req.query.username);
-      if(req.query.msg_registredUser !== '' && req.query.msg_registredUser !== undefined){
-        message = "Successfulyy create user";
-        res.render('users/login', {success_msg: message , username : username });
-      } else {
-        res.render('users/login', {username : username });
-      }
+      res.render('users/login', {success_msg: message, username: username})
     } else {
       res.render('users/login', {username : ''});
     }
 });
 
+router.post('/login', function(req,res,next){
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) {
+      return res.render('users/login', {username: '', error_msg: info.error_msg}); }
+    // req / res held in closure
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/users/profile');
+    });
+  })(req, res, next);
+});
+
+// PASSPORT LOCAL STRATEGY
 passport.use(new LocalStrategy(
   function(username, password, done) {
     User.getUserByUsername(username, function(err, user) {
@@ -114,31 +135,13 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-router.post('/login', function(req,res,next){
-  passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) {
-      return res.render('users/login', {username: '', error_msg: info.error_msg}); }
-    // req / res held in closure
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
-      return res.render('index', {user: user});
-    });
-  })(req, res, next);
-}
-);
-
-
-router.get('/logout', function(req, res) {
-    req.logout();
-    res.render('users/login', {username: '', success_msg: 'Loggout successfully.'});
-});
-
+// PROFILE OF A USER
 router.get('/profile', ensureAuthenticated, function(req, res){
   res.render('users/profile', {user: req.user});
 });
 
 router.post('/profile', ensureAuthenticated, function(req,res){
+    console.log("req.body " + JSON.stringify(req.body));
     var username = req.body.username;
     var name = req.body.name;
     var lastname = req.body.lastname;
@@ -151,20 +154,21 @@ router.post('/profile', ensureAuthenticated, function(req,res){
     }
     User.updateInfo({user: req.user},{params}, function(user){
       res.render('users/profile', {user: req.user, success_msg: 'Información salvada exitosamente'});
-    })
+    });
 });
+
+// LOGOUT
+router.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/users/login');
+    //res.render('users/login', {username: '', success_msg: 'Loggout successfully.'});
+});
+
 
 router.get('/ping', function(req, res){
     res.status(200).send("pong!");
 });
 
-function ensureAuthenticated(req, res, next){
-  if(req.isAuthenticated()){
-    console.log("auth");
-    return next();
-  } else {
-    res.render('users/login', {username:'', error_msg: 'Debes estar logueado'});
-  }
-}
+
 
 module.exports = router;

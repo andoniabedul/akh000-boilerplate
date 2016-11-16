@@ -10,8 +10,9 @@
       <input type="text" name="lastname" value="<%= user.lastname %>" class="form-control" disabled>
       <label for="lastname">Email: </label>
       <input type="text" name="email" value="<%= user.email %>" class="form-control" disabled>
+      <input type="hidden" name="info" value="true">
       <br>
-      <button class="btn btn-default" id="info" type="button" name="Edit">Edit</button>
+      <button class="btn btn-default" id="info" value="true" type="button" name="Edit">Edit</button>
     </form>
     <hr>
     <form id="passwordForm" action="profile" method="POST">
@@ -22,7 +23,7 @@
       <label for="newPassword2">Repeat the new password: </label>
       <input type="password" name="newPassword2" class="form-control" disabled>
       <br>
-      <button class="btn btn-default" id="password" type="button" name="Edit">Edit</button>
+      <button class="btn btn-default" id="password" type="button" name="Edit" value="true">Edit</button>
     </form>
   </div>
 <% include ../footer %>
