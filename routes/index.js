@@ -7,9 +7,9 @@ const flash = require('connect-flash');
 const User = require('../model/user');
 
 
-router.get('/', ensureAuthenticated,function (req, res) {
+exports.getIndex = function(req,res){
     res.render('index', { user : req.user });
-});
+}
 
 function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated()){
@@ -19,4 +19,3 @@ function ensureAuthenticated(req, res, next){
     res.render('users/login', {username:'', error_msg: 'Debes estar logueado'});
   }
 }
-module.exports = router;

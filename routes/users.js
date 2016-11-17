@@ -8,22 +8,13 @@ const User = require('../model/user');
 const nconf = require('nconf');
 nconf.file('./config/data.json');
 
-// CHECK IF IS AUTHENTICATED
-function ensureAuthenticated(req, res, next){
-  if(req.isAuthenticated()){
-    console.log("auth");
-    return next();
-  } else {
-    res.render('users/login', {username:'', error_msg: 'Debes estar logueado'});
-  }
-}
 
 // REGISTER USERS BY USERNAME
-router.get('/register', function(req, res) {
+exports.getRegister = function(req, res) {
     res.render('users/register');
-});
+};
 
-router.post('/register', function(req, res) {
+exports.postRegister = function(req, res) {
     var username = req.body.username;
     var email = req.body.email;
     var name = req.body.name;
@@ -75,10 +66,10 @@ router.post('/register', function(req, res) {
 
 
     }
-});
+};
 
 // LOGIN USERS BY USERNAME
-router.get('/login', function(req, res) {
+exports.getLogin = function(req, res) {
     var message = "";
     var username = '';
     if(req.headers.referer === nconf.get('development:server')+'users/register' && req.query.username !== undefined){
@@ -88,9 +79,9 @@ router.get('/login', function(req, res) {
     } else {
       res.render('users/login', {username : ''});
     }
-});
+};
 
-router.post('/login', function(req,res,next){
+exports.postLogin = function(req,res,next){
   passport.authenticate('local', function(err, user, info) {
     if (err) { return next(err); }
     if (!user) {
@@ -101,47 +92,14 @@ router.post('/login', function(req,res,next){
       return res.redirect('/users/profile');
     });
   })(req, res, next);
-});
-
-// PASSPORT LOCAL STRATEGY
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.getUserByUsername(username, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { error_msg: 'Incorrect username.' });
-      } User.comparePasswords(password, user.password,function(err, isMatch){
-          if(err){
-            console.log(err);
-          } else {
-            if(isMatch){
-              return done(null, user);
-            } else {
-              return done(null,false, {error_msg: 'El password no coincide'});
-            }
-          }
-        });
-    });
-  }
-));
-
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.getUserById(id, function(err, user) {
-    done(err, user);
-  });
-});
+};
 
 // PROFILE OF A USER
-router.get('/profile', ensureAuthenticated, function(req, res){
+exports.getProfile = function(req, res){
   res.render('users/profile', {user: req.user});
-});
+};
 
-router.post('/profile', ensureAuthenticated, function(req,res){
-    console.log("req.body " + JSON.stringify(req.body));
+exports.postProfile = function(req,res){
     var username = req.body.username;
     var name = req.body.name;
     var lastname = req.body.lastname;
@@ -155,20 +113,11 @@ router.post('/profile', ensureAuthenticated, function(req,res){
     User.updateInfo({user: req.user},{params}, function(user){
       res.render('users/profile', {user: req.user, success_msg: 'Información salvada exitosamente'});
     });
-});
+};
 
 // LOGOUT
-router.get('/logout', function(req, res) {
+exports.getLogout = function(req, res) {
     req.logout();
     res.redirect('/users/login');
     //res.render('users/login', {username: '', success_msg: 'Loggout successfully.'});
-});
-
-
-router.get('/ping', function(req, res){
-    res.status(200).send("pong!");
-});
-
-
-
-module.exports = router;
+};

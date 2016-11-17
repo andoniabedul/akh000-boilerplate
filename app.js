@@ -18,10 +18,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // ROUTES
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
-
+var router = require('./config/routes');
 
 // MODELS
 var User = require('./model/user');
@@ -34,7 +31,6 @@ nconf.file('./config/data.json');
 nconf.set('env','development');
 
 const app = express();
-const router = express.Router();
 
 // VALIDATOR
 app.use(expressValidator());
@@ -77,14 +73,7 @@ app.use(function(req, res, next){
   res.locals.errors = ''; // MULTIPLE ERRORS
   res.locals.user = '';
   next();
-})
-
-// ROUTES
-app.use('/', routes);
-app.use('/users', users);
-
-
-
+});
 // passport config
 //passport.use(new //LocalStrategy(User.authenticate()));
 //passport.serializeUser(User.serializeUser());
@@ -130,5 +119,5 @@ if(nconf.get('env') === 'development'){
   mongoose.connect('mongodb://localhost/'+ nconf.get('production:database'));
   app.listen(nconf.get('production:PORT'));
 }
-
+router(app);
 module.exports = app;
