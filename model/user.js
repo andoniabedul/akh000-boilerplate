@@ -44,8 +44,13 @@ module.exports.updateInfo = function(user, params, callback){
 module.exports.updatePassword = function(user,newPassword, callback){
   bcrypt.genSalt(8, function(err, salt){
     bcrypt.hash(newPassword, salt, function(err,hash){
-      user.password = hash;
-      user.save(callback);
+      if(err){
+        console.log("Error en hash of new password");
+        callback(null, err);
+      } else {
+        user.password = hash;
+        user.save(callback);
+      }
     })
   })
 }

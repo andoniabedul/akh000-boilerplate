@@ -141,20 +141,57 @@ router.get('/profile', ensureAuthenticated, function(req, res){
 });
 
 router.post('/profile', ensureAuthenticated, function(req,res){
-    console.log("req.body " + JSON.stringify(req.body));
-    var username = req.body.username;
-    var name = req.body.name;
-    var lastname = req.body.lastname;
-    var email = req.body.email;
-    params = {
-      username: username,
-      name: name,
-      lastname: lastname,
-      email: email
+    if(Object.hasOwnProperty.call(req.body, "info")){
+      var username = req.body.username;
+      var name = req.body.name;
+      var lastname = req.body.lastname;
+      var email = req.body.email;
+      params = {
+        username: username,
+        name: name,
+        lastname: lastname,
+        email: email
+      }
+      User.updateInfo({user: req.user},{params}, function(user){
+        res.render('users/profile', {user: req.user, success_msg: 'Información salvada exitosamente'});
+      });
+    } else if (Object.hasOwnProperty.call(req.body, "password")) {
+      var oldPassword = req.body.oldPassword;
+      var newPassword = req.body.newPassword1;
+      var repeatNewPassword = req.body.newPassword2;
+      req.checkBody('oldPassword', 'Password cant be empty').notEmpty();
+      req.checkBody('newPassword1','Passwords do not match').equals(req.body.newPassword2);
+      var errors = req.validationErrors();
+      if (errors) {
+        res.render('users/profile', {
+          errors: errors
+        });
+      } else {
+        User.comparePasswords(oldPassword,req.user.password, function(err,isMatch){
+          if(err){
+            console.log("Error: " + err);
+          } else {
+            if(isMatch){
+              console.log("El password coincide");
+              User.updatePassword(req.user, newPassword, function(err,updated){
+                if(err){
+                  console.log("Error updating password: " + err);
+                  res.render('users/profile', {
+                    error_msg: 'Error actualizando password'
+                  });
+                } else {
+                  res.render('users/profile', {
+                    success_msg: 'Password actualizado satisfactoriamente'
+                  });
+                }
+              });
+            } else {
+              console.log("El password no coincide");
+            }
+          }
+        });
+      }
     }
-    User.updateInfo({user: req.user},{params}, function(user){
-      res.render('users/profile', {user: req.user, success_msg: 'Información salvada exitosamente'});
-    });
 });
 
 // LOGOUT

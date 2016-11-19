@@ -108,7 +108,7 @@ if(nconf.get('env') === 'development'){
       error: err
     });
   });
-  console.log("\n ##########");
+  console.log("\n##########");
   console.log("Connecting with DEVELOPMENT database on mongodb://localhost:" + nconf.get('development:database'));
   console.log("Launching DEVELOPMENT environment on http://localhost:" + nconf.get('development:PORT'));
   console.log("##########\n");
