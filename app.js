@@ -21,8 +21,6 @@ const LocalStrategy = require('passport-local').Strategy;
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-
-
 // MODELS
 var User = require('./model/user');
 
@@ -83,8 +81,6 @@ app.use(function(req, res, next){
 app.use('/', routes);
 app.use('/users', users);
 
-
-
 // passport config
 //passport.use(new //LocalStrategy(User.authenticate()));
 //passport.serializeUser(User.serializeUser());
@@ -96,7 +92,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-
 
 // DEVELOPMENT CONFIG
 if(nconf.get('env') === 'development'){
