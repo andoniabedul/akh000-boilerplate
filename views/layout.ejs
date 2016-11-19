@@ -2,17 +2,18 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <script href="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script language="javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script href="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <title>Blob App</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <title>Example App</title>
   </head>
   <body>
     <div class="row">
       <div class="col-sm-12">
           <div class="navbar navbar-default">
           <div class="navbar-header">
-            <span class="navbar-brand">MENU</span>
+            <span class="navbar-brand"><a href="/">MENU</a></span>
             <button class="navbar-toggle" data-toggle="collapse" data-target="#menu">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
@@ -21,13 +22,33 @@
             </button>
           </div>
             <ul class="nav navbar-nav navbar-collapse collapse" id='menu'>
-              <li><a href="#">INDEX</a></li>
-              <li><a href="#">NUEVO</a></li>
-              <li><a href="#">Tres</a></li>
-              <li><a href="#">Cuatro</a></li>
+              <% if(!user) { %>
+                <li><a href="/users/login">Login</a></li>
+                <li><a href="/users/register">Register</a></li>
+              <% } %>
+              <% if(user) { %>
+                <li><a href="/users/profile">Profile, <%= user.username %></a></li>
+                <li><a href="/users/logout"> Logout </a></li>
+              <% } %>
+              <li><a href="#">#</a></li>
             </ul>
           </div>
       </div>
   </div>
   <div class="container">
-    
+    <% if (success_msg !== '' && success_msg !== null && success_msg !== undefined && success_msg !== NaN) { %>
+        <div class="alert alert-success"> <%= success_msg %> </div>
+    <% } %>
+    <% if (error_msg !== '' && error_msg !== null && error_msg !== undefined && error_msg !== NaN) { %>
+      <div class="alert alert-danger"> <%= error_msg %> </div>
+    <% } %>
+    <% if (errors !== '' && errors !== null && errors !== undefined && errors !== NaN) { %>
+      <div class="alert alert-danger">
+        There are <%= errors.length %> errors :
+        <ul>
+        <% for (var z=0; z < errors.length; z++){ %>
+          <li> <%= errors[z].msg %> </li>
+        <% } %>
+       </ul>
+      </div>
+    <% } %>
