@@ -11,7 +11,6 @@ nconf.file('./config/data.json');
 // CHECK IF IS AUTHENTICATED
 function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated()){
-    console.log("auth");
     return next();
   } else {
     res.render('users/login', {username:'', error_msg: 'Debes estar logueado'});
@@ -179,7 +178,8 @@ router.post('/profile', ensureAuthenticated, function(req,res){
                   });
                 } else {
                   res.render('users/profile', {
-                    success_msg: 'Password actualizado satisfactoriamente'
+                    success_msg: 'Password actualizado satisfactoriamente',
+                    user: updated
                   });
                 }
               });
