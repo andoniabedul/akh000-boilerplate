@@ -14,7 +14,7 @@ var passwordValidator = [
 
 var UserSchema = mongoose.Schema({
     username: {type: String, required: true}, // USERNAME
-    password: {type: String, required: true, validate: passwordValidator}// PASSWORD
+    password: {type: String, required: true, validate: passwordValidator}, // PASSWORD
     email: {type: String, required: true}, // USER EMAIL
     status: {verified:{type: Boolean, default: false}, token: String}, // VERIFY EMAIL
     resetPasswordToken: {type: String},
