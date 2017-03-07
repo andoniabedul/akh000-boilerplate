@@ -24,12 +24,8 @@ var users = require('./routes/users');
 // MODELS
 var User = require('./model/user');
 
-// ENV VARIABLES
-const nconf = require('nconf');
-nconf.file('./config/data.json');
-
-// CHANGE THE ENVIRONMENT HERE
-nconf.set('env','development');
+// CONFIG
+var config = require('./config/env.json')[process.env.NODE_ENV || 'development'];
 
 const app = express();
 const router = express.Router();
@@ -93,37 +89,21 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// DEVELOPMENT CONFIG
-if(nconf.get('env') === 'development'){
-  // DEVELOPMENT ERROR HANDLER SHOW ERRORS
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-  console.log("\n##########");
-  console.log("Connecting with DEVELOPMENT database on mongodb://localhost:" + nconf.get('development:database'));
-  console.log("Launching DEVELOPMENT environment on http://localhost:" + nconf.get('development:PORT'));
-  console.log("##########\n");
-  mongoose.connect('mongodb://localhost/'+ nconf.get('development:database'));
-  app.listen(nconf.get('development:PORT'));
-} else if (nconf.get('env') === 'production'){
-  // PRODUCTION ERROR HANDLER DON'T SHOW ERRORS
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: {}
-    });
-  });
-  console.log("\n##########");
-  console.log("Connecting with DEVELOPMENT database on mongodb://localhost:" + nconf.get('production:database'));
-  console.log("Launching DEVELOPMENT environment on http://localhost:" + nconf.get('production:PORT'));
-  console.log("##########\n");
-  mongoose.connect('mongodb://localhost/'+ nconf.get('production:database'));
-  app.listen(nconf.get('production:PORT'));
-}
+console.log("######################################");
+console.log("Launching environment on: ");
+console.log(config.server);
+console.log("######################################");
+console.log(" ******* LAUNCHING EXAMPLE APP ******* ");
+console.log("######################################");
+console.log("Connecting database on: ");
+console.log(config.mongo_uri + config.database);
+console.log("######################################");
+console.log("\n");
+
+// LAUNCH CONNECTION WITH DATABASE
+mongoose.connect(config.mongo_uri + config.database);
+
+// LAUNCH THE APP ON THE LISTENING PORT
+app.listen(config.port);
 
 module.exports = app;
