@@ -23,6 +23,7 @@ var UserSchema = mongoose.Schema({
     lastname: {type: String},
     created_at: {type: Date, default: Date.now}
 });
+
 var User = module.exports = mongoose.model('User', UserSchema);
 
 //User.plugin(passportLocalMongoose);
@@ -38,8 +39,8 @@ module.exports.create = function(newUser, callback) {
 };
 
 module.exports.updateInfo = function(user, params, callback){
-  var u = user.user;
-  var p = params.params;
+  let u = user.user;
+  let p = params.params;
   if(u.username !== p.username){
     u.username = p.username;
   } if(u.name !== p.name){
@@ -70,12 +71,12 @@ module.exports.updatePassword = function(user,newPassword, callback){
 }
 
 module.exports.getUserByUsername = function(username, callback){
-  var query = {username: username};
+  let query = {username: username};
   User.findOne(query,callback);
 };
 
 module.exports.getUserByEmail = function(email,callback){
-  var query = {email: email};
+  let query = {email: email};
   User.findOne(query, callback);
 };
 
@@ -98,7 +99,7 @@ module.exports.createPasswordToken = function(user, callback){
     if (err) return console.log("Error createPasswordToken: " + err);
     if(user){
       crypto.randomBytes(20, function(err, buf){
-        var token = buf.toString('hex');
+        let token = buf.toString('hex');
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         user.save();
@@ -109,7 +110,7 @@ module.exports.createPasswordToken = function(user, callback){
 }
 
 module.exports.verifyPasswordToken = function(resetPasswordToken, callback){
-  var query = {resetPasswordToken: resetPasswordToken, resetPasswordExpires:{$gt: Date.now()}}
+  let query = {resetPasswordToken: resetPasswordToken, resetPasswordExpires:{$gt: Date.now()}}
   User.findOne(query, function(err, user){
     if(err) return callback(err,null);
     if(user){
@@ -119,7 +120,7 @@ module.exports.verifyPasswordToken = function(resetPasswordToken, callback){
 }
 
 module.exports.changeStatus = function(user, callback) {
-  var query = {username: user.username};
+  let query = {username: user.username};
   User.findOne(query, function(err, user) {
     if (err) return err;
     user.estatus.verified = true;

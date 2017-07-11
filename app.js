@@ -5,11 +5,11 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const auth = require('./middleware/auth');
 
-// MIDDLEWAR VALIDATOR
+// MIDDLEWARE VALIDATOR
 const expressValidator = require('express-validator');
-// INFO MESSAGES
-const flash = require('connect-flash');
+
 // DATABASE
 const mongoose = require('mongoose');
 
@@ -18,7 +18,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // ROUTES
-var routes = require('./routes/index');
+var root = require('./routes/root');
 var users = require('./routes/users');
 
 // MODELS
@@ -37,7 +37,6 @@ app.use(expressValidator());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -69,12 +68,13 @@ app.use(function(req, res, next){
   res.locals.success_msg = ''; // SUCCESSFULLY MESSAGES
   res.locals.error_msg = ''; // SINGLE ERROR
   res.locals.errors = ''; // MULTIPLE ERRORS
-  res.locals.user = '';
+  res.locals.user = (req.user)? req.user : '';
+  res.locals.session = req.session;
   next();
 })
 
 // ROUTES
-app.use('/', routes);
+app.use('/', root);
 app.use('/users', users);
 
 // passport config
@@ -102,7 +102,6 @@ console.log("\n");
 
 // LAUNCH CONNECTION WITH DATABASE
 mongoose.connect(config.mongo_uri + config.database);
-
 // LAUNCH THE APP ON THE LISTENING PORT
 app.listen(config.port);
 
