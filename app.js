@@ -18,14 +18,14 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // ROUTES
-var root = require('./routes/root');
-var users = require('./routes/users');
+const root = require('./routes/root');
+const users = require('./routes/users');
 
 // MODELS
-var User = require('./model/user');
+const User = require('./model/user');
 
 // CONFIG
-var config = require('./config/env.json')[process.env.NODE_ENV || 'development'];
+const config = require('./config/env.json')[process.env.NODE_ENV || 'development'];
 
 const app = express();
 const router = express.Router();
@@ -53,7 +53,7 @@ app.use(require('node-sass-middleware')({
 app.use(require('express-session')({
     secret: 'M4LD1T0-G0RD0-C0MUN1ST4',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true
 }));
 
 // PASSPORT
@@ -68,8 +68,7 @@ app.use(function(req, res, next){
   res.locals.success_msg = ''; // SUCCESSFULLY MESSAGES
   res.locals.error_msg = ''; // SINGLE ERROR
   res.locals.errors = ''; // MULTIPLE ERRORS
-  res.locals.user = (req.user)? req.user : '';
-  res.locals.session = req.session;
+  res.locals.user = (req.user)? req.session.passport.user : '';
   next();
 })
 
@@ -77,28 +76,28 @@ app.use(function(req, res, next){
 app.use('/', root);
 app.use('/users', users);
 
-// passport config
-//passport.use(new //LocalStrategy(User.authenticate()));
-//passport.serializeUser(User.serializeUser());
-//passport.deserializeUser(User.deserializeUser());
+// PASSPORT LOCAL STRATEGY
+passport.use(new LocalStrategy(auth.authenticate));
+passport.serializeUser(auth.serializeUser);
+passport.deserializeUser(auth.deserializeUser);
 
-// catch 404 and forward to error handler
+// CATCH 404 ERROR HANDLER
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-console.log("######################################");
-console.log("Launching environment on: ");
-console.log(config.server);
-console.log("######################################");
-console.log(" ******* LAUNCHING EXAMPLE APP ******* ");
-console.log("######################################");
-console.log("Connecting database on: ");
-console.log(config.mongo_uri + config.database);
-console.log("######################################");
-console.log("\n");
+console.log(
+  `\n->  Launching environment on:
+    ${config.server}
+    ##########################################
+    ******** LAUNCHING ${config.titles.app} ********
+    ##########################################
+    Connecting database on:
+    ${config.mongo_uri} + ${config.database}
+    ##########################################\n`
+);
 
 // LAUNCH CONNECTION WITH DATABASE
 mongoose.connect(config.mongo_uri + config.database);

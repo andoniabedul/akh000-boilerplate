@@ -11,6 +11,41 @@ module.exports.ensureAuthenticated = function(req, res, next){
     res.render('users/login', {username:'', error_msg: 'Debes estar logueado'});
   }
 };
+module.exports.serializeUser = function(user, done){
+  let SerializedUser = {
+    _id: user._id,
+    username: user.username,
+    email: user.email, // USER EMAIL
+    name: user.name,
+    lastname: user.lastname
+  };
+  done(null, SerializedUser);
+}
+module.exports.deserializeUser = function(user, done){
+  User.getUserById(user._id, function(err, user) {
+    done(err, user);
+  });
+}
+
+module.exports.authenticate = function(username, password, done) {
+  User.getUserByUsername(username, function(err, user) {
+    if (err) { return done(err); }
+    if (!user) {
+      return done(null, false, { error_msg: 'Incorrect username.' });
+    } User.comparePasswords(password, user.password, function(err, isMatch){
+        if(err){
+          console.log(err);
+        } else {
+          if(isMatch){
+            return done(null, user);
+          } else {
+            return done(null,false, {error_msg: 'El password no coincide'});
+          }
+        }
+      });
+  });
+};
+
 passport.serializeUser(function(user, done) {
   let SerializedUser = {
     _id: user._id,

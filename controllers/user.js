@@ -1,6 +1,6 @@
 /*
   ********** USER CONTROLLER **********
-  This file manage the logic for user logic
+  This file manage the logic for user module
   - Methods: (#HTTP_METHOD)
     #GET REGISTER
     #POST REGISTER
@@ -15,43 +15,7 @@ const User = require('../model/user');
 const expressValidator = require('express-validator');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-// PASSPORT LOCAL STRATEGY
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.getUserByUsername(username, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { error_msg: 'Incorrect username.' });
-      } User.comparePasswords(password, user.password, function(err, isMatch){
-          if(err){
-            console.log(err);
-          } else {
-            if(isMatch){
-              return done(null, user);
-            } else {
-              return done(null,false, {error_msg: 'El password no coincide'});
-            }
-          }
-        });
-    });
-  }
-));
-passport.serializeUser(function(user, done) {
-  let SerializedUser = {
-    _id: user._id,
-    username: user.username,
-    email: user.email, // USER EMAIL
-    name: user.name,
-    lastname: user.lastname
-  };
-  done(null, SerializedUser);
-});
 
-passport.deserializeUser(function(user, done) {
-  User.getUserById(user._id, function(err, user) {
-    done(err, user);
-  });
-});
 module.exports = {
   getRegister: function(req, res) {
       res.render('users/register');
@@ -128,7 +92,7 @@ module.exports = {
     })(req, res, next);
   },
   getProfile: function(req,res){
-    res.render('users/profile', {user: req.user});
+    res.render('users/profile');
   },
   postProfile: function(req, res){
     if(Object.hasOwnProperty.call(req.body, "info")){
@@ -143,7 +107,7 @@ module.exports = {
         email: email
       }
       User.updateInfo({user: req.user},{params}, function(user){
-        res.render('users/profile', {user: req.user, success_msg: 'Información salvada exitosamente'});
+        res.render('users/profile', {success_msg: 'Información salvada exitosamente'});
       });
     } else if (Object.hasOwnProperty.call(req.body, "password")) {
       let oldPassword = req.body.oldPassword;
