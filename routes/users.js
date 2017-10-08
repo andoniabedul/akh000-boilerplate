@@ -3,9 +3,6 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const userController = require('../controllers/user');
 
-// REGISTER USERS BY USERNAME
-router.get('/register', userController.getRegister);
-router.post('/register', userController.postRegister);
 // LOGIN USERS BY USERNAME
 router.get('/login', userController.getLogin);
 router.post('/login', userController.postLogin);

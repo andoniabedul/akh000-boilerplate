@@ -1,0 +1,19 @@
+<% include ../layout %>
+  <h3>Crear cliente</h3>
+  <form action="/users/register" method="post">
+    <div class="form-group">
+      <label for="name">Nombre: </label>
+      <input type="text" name="name" placeholder="" class="form-control">
+      <label for="desc">Descripcion: </label>
+      <input type="textfield" name="desc" placeholder="" class="form-control">
+      <label for="address">Direccion: </label>
+      <input type="text" name="address" placeholder="" class="form-control">
+      <label for="name">Dominio de correo: </label>
+      <input type="text" name="domainEmail" placeholder="" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-success" name="button">Crear</button>
+    <a href="/">
+      <button type="button" class="btn btn-primary" name="button">Cancelar</button>
+    </a>
+  </form>
+<% include ../footer %>

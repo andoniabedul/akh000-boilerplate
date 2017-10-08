@@ -20,6 +20,8 @@ const LocalStrategy = require('passport-local').Strategy;
 // ROUTES
 const root = require('./routes/root');
 const users = require('./routes/users');
+const clients = require('./routes/clients');
+const admin = require('./routes/admin');
 
 // MODELS
 const User = require('./model/user');
@@ -75,6 +77,8 @@ app.use(function(req, res, next){
 // ROUTES
 app.use('/', root);
 app.use('/users', users);
+app.use('/clients', clients);
+app.use('/admin', admin);
 
 // PASSPORT LOCAL STRATEGY
 passport.use(new LocalStrategy(auth.authenticate));

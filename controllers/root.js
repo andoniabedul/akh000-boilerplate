@@ -6,9 +6,16 @@
 */
 const User = require('../model/user');
 const expressValidator = require('express-validator');
+const Client = require('../model/client');
 
  module.exports = {
    getIndex: function (req, res) {
-       res.render('index');
+     Client.listClients(function(err, result){
+       if(err) res.render('error', {error:err});
+       res.render('index', {clients: result});
+     });
+   },
+   getAdminIndex: function(req, res){
+     res.render('admin/index');
    }
  }

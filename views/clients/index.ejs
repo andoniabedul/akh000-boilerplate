@@ -1,0 +1,19 @@
+<% include ../layout %>
+<div class="row">
+  <h3>Clientes</h3>
+  <hr>
+  <div class="list-group">
+    <% for(var i = 0; i < clients.length; i++) { %>
+      <div class="list-group-item">
+        <a href="/clients/<%= clients[i]._id %>"
+            <h4 class="list-group-item-heading">
+              <%= clients[i].name %>
+            </h4>
+            <p class="list-group-item-text">
+              <%= clients[i].desc %>
+            </p>
+      </div>
+    <% } %>
+  </div>
+</div>
+<% include ../footer %>

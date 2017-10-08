@@ -17,10 +17,26 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 module.exports = {
-  getRegister: function(req, res) {
-      res.render('users/register');
+  getUsers: function(req, res){
+    User.getUsers(function(err, users){
+      if(err) res.render('users/index', {user: req.user, users: null, error_msg: err});
+      res.render('admin/users', {user: req.user, users: users});
+    })
   },
-  postRegister: function(req, res){
+  getUser: function(req, res){
+    let username = req.params.username;
+    User.getUserByUsername(username, function(err, user){
+      if(err) res.render('error', {user: req.user, error: err});
+      res.render('admin/user', {user: req.user, requestedUser: user});
+    });
+  },
+  postUser: function(req, res){
+
+  },
+  getNewUser: function(req, res) {
+      res.render('admin/create', { user: req.user });
+  },
+  postNewUser: function(req, res){
     let username = req.body.username;
     let email = req.body.email;
     let name = req.body.name;

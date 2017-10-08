@@ -1,0 +1,29 @@
+{
+  name: 'Banplus',
+  desc: 'Banco privado de Venezuela',
+  address: 'Paseo Las Merces',
+  domainEmail: '@banplus.com.ve',
+  logo: '/public/images/logo.png',
+  projects: [
+    {
+      name: 'Finanzas Internas',
+      accessRole: ['manager']
+    },
+    {
+      name: 'Gestion TDC',
+      accessRole: ['specialist', 'manager']
+    }
+  ]
+}
+
+
+{username: 'manager',
+password: '$2a$08$Epfl0baxsItTDthvN/DzDOlkOOL4ZHhsKZwLIu2dJ8sje8ojvn0A6',
+email: 'manager@pranical.com',
+role: 'specialist',
+status: {verified:true},
+name: 'admin',
+lastname: 'admin',
+phone: '231231321',
+photo: '/public/images/photo.jpg',
+working_on: [ObjectId("59c804ede972e414f2d8e9ce")]}

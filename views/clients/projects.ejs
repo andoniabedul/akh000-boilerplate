@@ -1,0 +1,9 @@
+<% include ../layout %>
+<div class="row">
+  <h3><%= client.name %></h3>
+  <hr>
+  <% for (var i = 0; i < projects.length; i++){ %>
+    <p><%= projects[i] %></p>
+  <% } %>
+</div>
+<% include ../footer %>

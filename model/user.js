@@ -2,25 +2,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
 const passportLocalMongoose = require('passport-local-mongoose');
-const validate = require('mongoose-validator');
-
-var passwordValidator = [
-  validate({
-    validator: 'isLength',
-    arguments: [6, 64],
-    message: 'El password debe ser de una longitud mayor a 6 carácteres'
-  })
-]
+var ObjectID = require('mongodb').ObjectID;
 
 var UserSchema = mongoose.Schema({
     username: {type: String, required: true}, // USERNAME
-    password: {type: String, required: true, validate: passwordValidator}, // PASSWORD
+    password: {type: String, required: true}, // PASSWORD
     email: {type: String, required: true}, // USER EMAIL
+    role: {type: String, required: true, enum: ['specialist', 'manager', 'admin'], default: 'specialist'},
     status: {verified:{type: Boolean, default: false}, token: String}, // VERIFY EMAIL
     resetPasswordToken: {type: String},
     resetPasswordExpires: {type: Date},
     name: {type: String},
     lastname: {type: String},
+    phone: {type: String},
+    photo: {type: String},
+    working_on:{type: Array},
+    active: {type: Boolean, default: true},
     created_at: {type: Date, default: Date.now}
 });
 
@@ -60,7 +57,6 @@ module.exports.updatePassword = function(user,newPassword, callback){
   bcrypt.genSalt(8, function(err, salt){
     bcrypt.hash(newPassword, salt, null, function(err,hash){
       if(err){
-        console.log("Error en hash of new password");
         callback(null, err);
       } else {
         user.password = hash;
@@ -69,7 +65,12 @@ module.exports.updatePassword = function(user,newPassword, callback){
     })
   })
 }
-
+module.exports.getUsers = function(callback){
+  User.find({}, function(err, users){
+    if(err) return callback(err, null);
+    callback(null, users);
+  });
+}
 module.exports.getUserByUsername = function(username, callback){
   let query = {username: username};
   User.findOne(query,callback);
@@ -87,8 +88,7 @@ module.exports.getUserById = function(id,callback){
 module.exports.comparePasswords = function(password, hash, callback){
   bcrypt.compare(password,hash,function(err,isMatch){
     if (err) {
-      callback(null, null);
-      console.log("Error comparando password");
+      callback(err, null);
     } else {
       callback(null, isMatch);
     }
@@ -126,5 +126,15 @@ module.exports.changeStatus = function(user, callback) {
     user.estatus.verified = true;
     user.save();
     callback(user);
+  });
+};
+
+module.exports.desactivateUser = function(user, callback){
+  let query = {username: user.username};
+  User.findOne(query, function(err, user){
+    if(err) return callback(err, null);
+    user.active = false;
+    user.save();
+    callback(null, user);
   });
 };

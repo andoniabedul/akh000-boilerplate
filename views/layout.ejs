@@ -6,49 +6,48 @@
     <script href="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
-    <title> ExampleApp </title>
+    <script src="https://use.fontawesome.com/c74b061168.js"></script>
+    <title> DOCHUB </title>
   </head>
   <body>
-    <div class="row">
-      <div class="col-sm-12">
-          <div class="navbar navbar-default">
-          <div class="navbar-header">
-            <span class="navbar-brand"><a href="/">MENU</a></span>
-            <button class="navbar-toggle" data-toggle="collapse" data-target="#menu">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-            <ul class="nav navbar-nav navbar-collapse collapse" id='menu'>
-              <% if(!user) { %>
-                <li><a href="/users/login">Login</a></li>
-                <li><a href="/users/register">Register</a></li>
-              <% } %>
-              <% if(user) { %>
-                <li><a href="/users/profile">Profile, <%= user.username %></a></li>
-                <li><a href="/users/logout"> Logout </a></li>
-              <% } %>
-              <li><a href="#">#</a></li>
-            </ul>
-          </div>
+    <div class="navbar navbar-default">
+      <div class="navbar-header">
+        <span class="navbar-brand"><a href="/">DOCHUB</a></span>
+        <button class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
       </div>
-  </div>
-  <div class="container">
-    <% if (success_msg !== '' && success_msg !== null && success_msg !== undefined && success_msg !== NaN) { %>
-        <div class="alert alert-success"> <%= success_msg %> </div>
-    <% } %>
-    <% if (error_msg !== '' && error_msg !== null && error_msg !== undefined && error_msg !== NaN) { %>
-      <div class="alert alert-danger"> <%= error_msg %> </div>
-    <% } %>
-    <% if (errors !== '' && errors !== null && errors !== undefined && errors !== NaN) { %>
-      <div class="alert alert-danger">
-        There are <%= errors.length %> errors :
-        <ul>
-        <% for (var z=0; z < errors.length; z++){ %>
-          <li> <%= errors[z].msg %> </li>
+      <ul class="nav navbar-nav navbar-collapse collapse" id="menu">
+        <% if(user) { %>
+          <li><a href="/"><i class="fa fa-home fa-2"></i></a></li>
+          <li><a href="/users/profile">Profile, <%= user.username %></a></li>
+          <li><a href="/users/logout"> Logout </a></li>
+          <% if(user.role === 'administrator'){ %>
+            <li><a href="admin/index"> Admin </a></li>
+          <% } %>
         <% } %>
-       </ul>
+      </ul>
+    </div>
+    <div class="container">
+      <div class="row">
+        <% if (success_msg !== '' && success_msg !== null && success_msg !== undefined && success_msg !== NaN) { %>
+            <div class="alert alert-success"> <%= success_msg %> </div>
+        <% } %>
+        <% if (error_msg !== '' && error_msg !== null && error_msg !== undefined && error_msg !== NaN) { %>
+          <div class="alert alert-danger"> <%= error_msg %> </div>
+        <% } %>
+        <% if (errors !== '' && errors !== null && errors !== undefined && errors !== NaN) { %>
+          <div class="alert alert-danger">
+            There are <%= errors.length %> errors :
+            <ul>
+            <% for (var z=0; z < errors.length; z++){ %>
+              <li> <%= errors[z].msg %> </li>
+            <% } %>
+           </ul>
+          </div>
+        <% } %>
       </div>
-    <% } %>
+      <div class="row">

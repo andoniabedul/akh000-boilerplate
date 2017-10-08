@@ -1,0 +1,19 @@
+<% include ../layout %>
+<div class="row">
+  <h3>Usuarios</h3>
+  <hr>
+  <div class="list-group">
+    <% for(var i = 0; i < users.length; i++) { %>
+      <div class="list-group-item">
+        <a href="/admin/users/<%= users[i].username %>/user"
+            <h4 class="list-group-item-heading">
+              <%= users[i].name %>
+            </h4>
+            <p class="list-group-item-text">
+              <%= users[i].role %>
+            </p>
+      </div>
+    <% } %>
+  </div>
+</div>
+<% include ../footer %>
