@@ -15,30 +15,91 @@ const User = require('../model/user');
 const expressValidator = require('express-validator');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const Client = require('../model/client');
 
 module.exports = {
   getUsers: function(req, res){
     User.getUsers(function(err, users){
       if(err) res.render('users/index', {user: req.user, users: null, error_msg: err});
-      res.render('admin/users', {user: req.user, users: users});
+      res.render('admin/users/users', {user: req.user, users: users});
     })
   },
   getUser: function(req, res){
     let username = req.params.username;
     User.getUserByUsername(username, function(err, user){
       if(err) res.render('error', {user: req.user, error: err});
-      res.render('admin/user', {user: req.user, requestedUser: user});
+      res.render('admin/users/user', {user: req.user, requestedUser: user});
     });
   },
   postUser: function(req, res){
+    if(Object.hasOwnProperty.call(req.body, "info")){
+      let username = req.body.username;
+      let name = req.body.name;
+      let lastname = req.body.lastname;
+      let email = req.body.email;
+      let params = {
+        username: username,
+        name: name,
+        lastname: lastname,
+        email: email
+      }
+      User.updateInfo({user: req.user},{params}, function(user){
+        res.render('users/profile', {success_msg: 'Información salvada exitosamente'});
+      });
+    } else if (Object.hasOwnProperty.call(req.body, "password")) {
+      let oldPassword = req.body.oldPassword;
+      let newPassword = req.body.newPassword1;
+      let repeatNewPassword = req.body.newPassword2;
 
+      req.checkBody('oldPassword', 'Password cant be empty').notEmpty();
+      req.checkBody('newPassword1','Passwords do not match').equals(req.body.newPassword2);
+      let errors = req.validationErrors();
+      if (errors) {
+        res.render('users/profile', {
+          errors: errors
+        });
+      } else {
+        User.comparePasswords(oldPassword,req.user.password, function(err,isMatch){
+          if(err){
+            console.log("Error: " + err);
+          } else {
+            if(isMatch){
+              console.log("El password coincide");
+              User.updatePassword(req.user, newPassword, function(err,updated){
+                if(err){
+                  console.log("Error updating password: " + err);
+                  res.render('users/profile', {
+                    error_msg: 'Error actualizando password'
+                  });
+                } else {
+                  res.render('users/profile', {
+                    success_msg: 'Password actualizado satisfactoriamente',
+                    user: updated
+                  });
+                }
+              });
+            } else {
+              console.log("El password no coincide");
+            }
+          }
+        });
+      }
+    }
   },
   getNewUser: function(req, res) {
-      res.render('admin/create', { user: req.user });
+      Client.listClients(function(err, clients){
+        let serializedClients = clients.map((client) => {
+          return {_id: client._id, name: client.name}
+        });
+        res.render('admin/users/create', { user: req.user, clients: serializedClients });
+      });
+
   },
   postNewUser: function(req, res){
     let username = req.body.username;
     let email = req.body.email;
+    let role = req.body.role;
+    let working_on = req.body.working_on;
     let name = req.body.name;
     let lastname = req.body.lastname;
     let password1 = req.body.password1;
@@ -55,7 +116,7 @@ module.exports = {
     // OPTIONAL TO-DO: RENDER ALL FIELDS WHERE DONT EXIST ERRORS TO THE FORM
     let errors = req.validationErrors();
     if (errors) {
-      res.render('users/register', {errors: errors});
+      res.render('admin/users/create', {errors: errors});
     } else {
       User.getUserByUsername(username, function(err, checkUser){
         if(err){
@@ -76,7 +137,7 @@ module.exports = {
               res.redirect('login?username='+ encodeURIComponent(username));
             });
           } else {
-            res.render('users/register', {
+            res.render('admin/users/create', {
               error_msg: 'Somebody already have that username.', error: errors
             });
           }
@@ -87,7 +148,7 @@ module.exports = {
   getLogin: function(req,res){
     let message = "";
     let username = '';
-    if(req.headers.referer === config.development+'users/register' && req.query.username !== undefined){
+    if(req.headers.referer === config.development+'admin/users/create' && req.query.username !== undefined){
       message = "Successfulyy create user";
       username = decodeURIComponent(req.query.username);
       res.render('users/login', {success_msg: message, username: username})

@@ -30,8 +30,8 @@ router.get('/users/', userController.getUsers);
 router.get('/users/:username/user', userController.getUser);
 router.get('/users/create', userController.getNewUser);
 router.post('/users/create', userController.postNewUser);
+router.post('/users/:id/edit', userController.postUser);
 /*
-router.get('/users/:id/edit', userController.getEditUser);
 router.post('/users/:id/edit', userController.postEditUser);
 */
 

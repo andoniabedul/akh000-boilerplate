@@ -30,7 +30,7 @@ module.exports = {
     Client.findById(id, function(err, client){
       if(err) res.render('error', {error:err});
       projects = client.projects.filter((project)=>{
-        return project.accessRole.includes(req.user.role) === true;
+        return project.accessRole.includes(req.user.role) === true || req.user.role === "admin";
       });
       res.render('clients/projects', {client: client, projects: projects});
     });

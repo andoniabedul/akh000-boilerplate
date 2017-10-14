@@ -1,0 +1,42 @@
+<% include ../../layout %>
+  <h1>Create user</h1>
+  <form action="/admin/users/create" method="post">
+    <div class="form-group">
+      <label for="username">Username: </label>
+      <input type="text" name="username" placeholder="Enter Username" class="form-control">
+      <label for="email">Email: </label>
+      <input type="text" name="email" placeholder="Enter your mail" class="form-control">
+      <div class="form-group">
+       <label for="role">Role: </label>
+       <select class="form-control" name="role">
+         <option value="specialist">Specialist</option>
+         <option value="manager">Manager</option>
+         <option value="admin">Administrador</option>
+       </select>
+      </div>
+      <div class="form-group">
+       <label for="role">Working on: </label>
+       <select class="form-control" name="working_on">
+         <% for(var i = 0; i < clients.length; i++) { %>
+         <option value="<%= clients[i]._id %>"> <%= clients[i].name %></option>
+         <% } %>
+       </select>
+      </div>
+      <label for="name">Password: </label>
+      <label for="password1">Password: </label>
+      <input type="password" name="password1" placeholder="Enter password" class="form-control">
+      <label for="password2">Repeat the password: </label>
+      <input type="password" name="password2" placeholder="Verify password" class="form-control">
+      <label for="name">Name: </label>
+      <input type="text" name="name" placeholder="Name" class="form-control">
+      <label for="lastname">Lastname: </label>
+      <input type="text" name="lastname" placeholder="Lastname" class="form-control">
+      <label for="phone">Phone: </label>
+      <input type="text" name="phone" placeholder="Phone" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-success" name="button"> Create </button>
+    <a href="/">
+      <button type="button" class="btn btn-primary" name="button">Cancel</button>
+    </a>
+  </form>
+<% include ../../footer %>
