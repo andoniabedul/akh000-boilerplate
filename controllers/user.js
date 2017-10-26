@@ -104,6 +104,7 @@ module.exports = {
     let lastname = req.body.lastname;
     let password1 = req.body.password1;
     let password2 = req.body.password2;
+    let phone = req.body.phone;
 
     req.checkBody('username','Username is required').notEmpty();
     req.checkBody('email','Email not valid').isEmail();
@@ -126,15 +127,17 @@ module.exports = {
             let newUser = new User({
               username: username,
               password: password1,
+              working_on: working_on,
               email: email,
               name: name,
-              lastname: lastname
+              lastname: lastname,
+              phone: phone
             })
             User.create(newUser, function(err,user){
               if(err){
                 console.log("Error creating user: " + err);
               }
-              res.redirect('login?username='+ encodeURIComponent(username));
+              res.redirect('/admin/users');
             });
           } else {
             res.render('admin/users/create', {

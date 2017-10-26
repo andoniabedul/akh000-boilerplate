@@ -20,10 +20,19 @@ const Client = require('../model/client');
 
 module.exports = {
   getClients: function(req, res){
-    Client.listClients(function(err, result){
-      if(err) res.render('error', {error:err});
-      res.render('clients/index', {clients: result});
-    });
+    if(req.user.role === "admin"){
+      Client.listClients(function(err, result){
+        if(err) res.render('error', {error:err});
+        res.render('clients/index', {clients: result});
+      });
+    } else {
+      Client.findClientsById(req.user.working_on, function(err, clients){
+        if(err) res.render('error', {error: err});
+        else {
+          res.render('clients/index', {clients: clients})
+        }
+      });
+    }
   },
   getClient: function(req, res){
     let id = req.params.id;
@@ -37,16 +46,23 @@ module.exports = {
   },
   // AQUI VA EL FILE MANAGER
   getProject: function(req, res){
-
+    let id = req.params.id;
+    Client.findById(id, function(err, client){
+      if(err) res.render('error', {error:err});
+      projects = client.projects.filter((project)=>{
+        return project.accessRole.includes(req.user.role) === true || req.user.role === "admin";
+      });
+      res.render('clients/project', {client: client, projects: projects});
+    });
   },
   getNewClient: function(req, res){
-    res.render('clients/new');
+    res.render('admin/clients/new');
   },
   postNewClient: function(req, res){
 
   },
   getNewProject: function(req, res){
-
+    res.render('admin/clients/new_project.ejs');
   },
   postNewProject: function(req, res){
 

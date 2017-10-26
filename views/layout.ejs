@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <script language="javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script href="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script href="/javascripts/jBreadCrumb.js"></script>
+    <script href="/javascripts/main.js"></script>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="https://use.fontawesome.com/c74b061168.js"></script>
@@ -22,12 +24,16 @@
       </div>
       <ul class="nav navbar-nav navbar-collapse collapse" id="menu">
         <% if(user) { %>
-          <li><a href="/"><i class="fa fa-home fa-2"></i></a></li>
-          <li><a href="/users/profile">Profile, <%= user.username %></a></li>
-          <li><a href="/users/logout"> Logout </a></li>
-          <% if(user.role === 'administrator'){ %>
-            <li><a href="admin/index"> Admin </a></li>
+          <li class="menuItem"><a href="/"><i class="fa fa-home fa-2"></i></a></li>
+          <% if(user.role === 'admin'){ %>
+            <li class="menuItem"><a href="/admin/"> Admin </a></li>
           <% } %>
+        <% } %>
+      </ul>
+      <ul class="nav navbar-nav navbar-collapse collapse pull-right" id="menu">
+        <% if(user) { %>
+          <li class="menuItem pull-right"><a href="/users/logout"> Logout </a></li>
+          <li class="menuItem pull-right"><a href="/users/profile">Profile, <%= user.username %></a></li>
         <% } %>
       </ul>
     </div>
@@ -50,4 +56,4 @@
           </div>
         <% } %>
       </div>
-      <div class="row">
+      <div class="row wrapper">

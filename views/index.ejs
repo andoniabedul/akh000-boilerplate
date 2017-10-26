@@ -1,7 +1,19 @@
 <% include ./layout %>
   <div class="row">
-    <h3>Clientes</h3>
+    <h3>Bienvenido, <%= user.name %></h3>
     <hr>
+    <h4>
+    Sistema de administración, gestión y registro de contenidos documentales
+    </h4>
+    <hr>
+    <a href="/clients">
+      <div width="300px" heigth="300px" style="margin: 0 auto">
+        <span>
+          Ir a tus clientes
+        </span>
+      </div>
+    </a>
+  <!--
     <div class="list-group">
       <% for(var i = 0; i < clients.length; i++) { %>
         <div class="list-group-item">
@@ -14,5 +26,6 @@
         </div>
       <% } %>
     </div>
+  -->
   </div>
 <% include ./footer %>

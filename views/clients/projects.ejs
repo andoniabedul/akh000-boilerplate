@@ -1,9 +1,19 @@
 <% include ../layout %>
 <div class="row">
-  <h3><%= client.name %></h3>
+  <h3> Proyectos de <%= client.name %>
+    <% if(user.role==='admin') { %>
+      <a href="/admin/clients/<%= client._id %>/projects/new"> + </a>
+    <% } %>
+  </h3>
   <hr>
   <% for (var i = 0; i < projects.length; i++){ %>
-    <p><%= projects[i] %></p>
+    <div class="list-group-item">
+      <a class="link" href="/clients/<%=client._id%>/projects/project">
+          <h4 class="list-group-item-heading">
+            <%= projects[i].name %>
+          </h4>
+      </a>
+    </div>
   <% } %>
 </div>
 <% include ../footer %>

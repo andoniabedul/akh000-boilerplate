@@ -1,0 +1,25 @@
+<% include ../../layout %>
+  <h3>Crear proyecto</h3>
+  <form action="/clients/register" method="post">
+    <div class="form-group normalForm">
+      <label for="name">Nombre: </label>
+      <input type="text" name="name" placeholder="" class="form-control">
+      <div class="form-group">
+       <label for="role">Rol </label>
+       <select class="form-control" name="role">
+         <option value="specialist">Especialista</option>
+         <option value="manager">Gerente</option>
+         <option value="admin">Administrador</option>
+       </select>
+      </div>
+      <label for="address">Fecha de inicio: </label>
+      <input type="text" name="address" placeholder="" class="form-control">
+      <label for="name">Fecha de inicio: </label>
+      <input type="text" name="domainEmail" placeholder="" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-success" name="button">Crear</button>
+    <a href="/">
+      <button type="button" class="btn btn-primary" name="button">Cancelar</button>
+    </a>
+  </form>
+<% include ../../footer %>

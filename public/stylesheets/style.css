@@ -2,6 +2,29 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
 
 a {
-  color: #00B7FF; }
+  color: #00B7FF;
+  text-decoration: none !important; }
+
+button {
+  margin: 1%; }
+
+.link {
+  text-decoration: none; }
+
+.wrapper {
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 1%; }
+
+.normalForm {
+  width: 50%;
+  margin: 0 auto; }
+  .normalForm input {
+    margin-bottom: 2%; }
+  .normalForm label {
+    padding: 1%;
+    color: white;
+    border-radius: 5px;
+    background-color: #0B2161; }
 
 /*# sourceMappingURL=style.css.map */

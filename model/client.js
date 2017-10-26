@@ -3,6 +3,12 @@ const Schema = mongoose.Schema;
 var ObjectID = require('mongodb').ObjectID;
 
 var ProjectSchema = mongoose.Schema({
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      index: true,
+      required: true,
+      auto: true
+    },
     name: {type:String, required: true},
     accessRole: {
       type: Array,
@@ -11,8 +17,7 @@ var ProjectSchema = mongoose.Schema({
       default: ['manager', 'admin']
     },
     beginDate: {type: Date, default: Date.now()},
-    endDate: {type: Date, default: Date.now()},
-    manager: {type: String}
+    endDate: {type: Date}
   }
 );
 
@@ -34,6 +39,14 @@ module.exports.listClients = function(callback){
   Client.find((err,result) => {
     if(err) callback(err,null);
     callback(null,result);
+  });
+}
+module.exports.findClientsById = function(clientsId, callback){
+  Client.find({_id: {$in: clientsId}}, function(err, clients){
+    if(err) callback(err, null);
+    else {
+      callback(null, clients);
+    }
   });
 }
 

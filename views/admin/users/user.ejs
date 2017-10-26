@@ -1,9 +1,7 @@
 <% include ../../layout %>
-  <h3> <%= requestedUser.username %> </h3>
+  <h3> Editing user: <%= requestedUser.username %> </h3>
   <hr>
-  <div class="form-group">
-    <h4>Change the info</h4>
-    <br>
+  <div class="form-group normalForm">
     <form id="infoForm" action="/admin/users/postUser" method="POST">
       <label for="username">Username: </label>
       <input type="text" name="username" value="<%= requestedUser.username %>" class="form-control" disabled>
@@ -18,20 +16,20 @@
       <input type="text" name="email" value="<%= requestedUser.email %>" class="form-control" disabled>
 
       <label for="lastname">Role: </label>
-      <input type="text" name="email" value="<%= requestedUser.role %>">
+      <input type="text" name="role"
+      class="form-control" value="<%= requestedUser.role %>" disabled>
 
       <label for="lastname">Working on: </label>
-      <input type="text" name="email" value="<%= requestedUser.working_on %>"
+      <input type="text" name="working_on" value="<%= requestedUser.working_on %>"
       class="form-control" disabled>
 
-      <label for="lastname">Teléfono: </label>
-      <input type="text" name="email" value="<%= requestedUser.working_on %>"
+      <label for="phone">Teléfono: </label>
+      <input type="text" name="phone" value="<%= requestedUser.phone %>"
       class="form-control" disabled>
-
       <input type="hidden" name="info" value="true">
       <br>
       <button class="btn btn-default" id="info" value="true" type="button" name="Edit">Edit</button>
-      <button class="btn btn-danger" id="delete">Desactivar</button>
+      <button class="btn btn-danger pull-right" id="delete">Desactivar</button>
       <span class="btn btn-danger" type="hidden" id="cancelInfo">Cancel</span>
     </form>
     <hr>

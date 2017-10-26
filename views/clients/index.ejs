@@ -1,6 +1,12 @@
 <% include ../layout %>
 <div class="row">
-  <h3>Clientes</h3>
+  <h3>Clientes
+    <% if(user.role==='admin') { %>
+      <a href="/admin/clients/new">
+        +
+      </a>
+    <% } %>
+  </h3>
   <hr>
   <div class="list-group">
     <% for(var i = 0; i < clients.length; i++) { %>

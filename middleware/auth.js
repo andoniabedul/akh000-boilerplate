@@ -77,8 +77,8 @@ passport.serializeUser(function(user, done) {
     _id: user._id,
     username: user.username,
     email: user.email, // USER EMAIL
-    name: user.name,
-    lastname: user.lastname
+    role: user.role,
+    working_on: user.working_on
   };
   done(null, SerializedUser);
 });

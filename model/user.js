@@ -5,7 +5,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 var ObjectID = require('mongodb').ObjectID;
 
 var UserSchema = mongoose.Schema({
-    username: {type: String, required: true}, // USERNAME
+    username: {type: String, required: true, trim: true}, // USERNAME
     password: {type: String, required: true}, // PASSWORD
     email: {type: String, required: true}, // USER EMAIL
     role: {type: String, required: true, enum: ['specialist', 'manager', 'admin'], default: 'specialist'},
@@ -16,7 +16,7 @@ var UserSchema = mongoose.Schema({
     lastname: {type: String},
     phone: {type: String},
     photo: {type: String},
-    working_on:{type: Array},
+    working_on:{type: Array, required: true},
     active: {type: Boolean, default: true},
     created_at: {type: Date, default: Date.now}
 });
@@ -28,7 +28,6 @@ module.exports.create = function(newUser, callback) {
   bcrypt.genSalt(8, function(err, salt) {
     console.log('genSalt', salt, err)
     bcrypt.hash(newUser.password, salt, null, function(err, hash) {
-      console.log("Entre modelo");
       newUser.password = hash;
       newUser.save(callback);
     });
