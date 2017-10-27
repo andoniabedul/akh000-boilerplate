@@ -16,8 +16,8 @@ var ProjectSchema = mongoose.Schema({
       enum: ['specialist', 'manager', 'admin'],
       default: ['manager', 'admin']
     },
-    beginDate: {type: Date, default: Date.now()},
-    endDate: {type: Date}
+    desc : {type: String, required: true},
+    created_at: {type: Date, default: Date.now()}
   }
 );
 
@@ -41,6 +41,15 @@ module.exports.listClients = function(callback){
     callback(null,result);
   });
 }
+module.exports.createClient = function(newClient, callback) {
+  let client = new Client();
+  client.name = newClient.name;
+  client.desc = newClient.desc;
+  client.address = newClient.address;
+  client.domainEmail = newClient.domainEmail;
+  client.logo = newClient.logo;
+  client.save(callback);
+}
 module.exports.findClientsById = function(clientsId, callback){
   Client.find({_id: {$in: clientsId}}, function(err, clients){
     if(err) callback(err, null);
@@ -56,6 +65,20 @@ module.exports.findById = function(id, callback){
     if(err) callback(err,null);
     if(result.length === 1){
       callback(null,result[0]);
+    }
+  });
+}
+
+module.exports.findByName = function(name, callback){
+  let query = {name: name};
+  Client.find(query, function(err, client){
+    if(err) callback(err, null);
+    else {
+      if(client.length > 0){
+        callback(null, client);
+      } else {
+        callback(null, null);
+      }
     }
   });
 }
