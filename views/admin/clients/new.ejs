@@ -1,6 +1,6 @@
 <% include ../../layout %>
   <h3>Crear cliente</h3>
-  <form action="/clients/register" method="post">
+  <form action="/admin/clients/new" method="post">
     <div class="form-group normalForm">
       <label for="name">Nombre: </label>
       <input type="text" name="name" placeholder="" class="form-control">
@@ -13,7 +13,7 @@
     </div>
     <button type="submit" class="btn btn-success" name="button">Crear</button>
     <a href="/">
-      <button type="button" class="btn btn-primary" name="button">Cancelar</button>
+      <button type="button" class="btn btn-danger" name="button">Cancelar</button>
     </a>
   </form>
 <% include ../../footer %>

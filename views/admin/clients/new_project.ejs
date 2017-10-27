@@ -1,21 +1,18 @@
 <% include ../../layout %>
   <h3>Crear proyecto</h3>
-  <form action="/clients/register" method="post">
+  <form action="/admin/clients/<%=client._id%>/projects/new" method="post">
     <div class="form-group normalForm">
-      <label for="name">Nombre: </label>
+      <label for="name">Nombre </label>
       <input type="text" name="name" placeholder="" class="form-control">
       <div class="form-group">
-       <label for="role">Rol </label>
-       <select class="form-control" name="role">
-         <option value="specialist">Especialista</option>
-         <option value="manager">Gerente</option>
-         <option value="admin">Administrador</option>
-       </select>
+       <label class="checkbox-inline"for="role">Rol</label>
+       <br>
+       <input type="checkbox" value="specialist">Especialista</input>
+       <input type="checkbox" value="manager">Gerente</input>
+       <input type="checkbox" value="admin">Administrador</input>
       </div>
-      <label for="address">Fecha de inicio: </label>
-      <input type="text" name="address" placeholder="" class="form-control">
-      <label for="name">Fecha de inicio: </label>
-      <input type="text" name="domainEmail" placeholder="" class="form-control">
+      <label for="address">Descripción </label>
+      <input type="text" name="desc" placeholder="" class="form-control">
     </div>
     <button type="submit" class="btn btn-success" name="button">Crear</button>
     <a href="/">

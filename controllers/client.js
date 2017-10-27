@@ -59,12 +59,52 @@ module.exports = {
     res.render('admin/clients/new');
   },
   postNewClient: function(req, res){
-
+    req.checkBody('name','Nombre es requerido').notEmpty();
+    req.checkBody('domainEmail', 'Dominio de correo es requerido').notEmpty();
+    let errors = req.validationErrors();
+    if (errors) {
+      res.render('admin/clients/new', {errors: errors});
+    } else {
+      Client.findByName(req.body.name, function(err, client){
+        if(err) res.render('error', {error: err});
+        else {
+          if(client){
+            res.render('admin/clients/new', {error_msg: 'Ya existe un cliente con ese nombre'});
+          } else {
+            let client = new Client();
+            client.name = req.body.name;
+            client.address = (req.body.address)? req.body.address:'';
+            client.desc = (req.body.desc)? req.body.desc:'';
+            client.domainEmail = req.body.domainEmail;
+            Client.createClient(client, function(err, client){
+              if(err) res.render('error', {error:err});
+              else {
+                res.render('admin/clients/new', {success_msg: 'Cliente creado satisfactoriamente', client: client});
+              }
+            });
+          }
+        }
+      });
+    }
   },
   getNewProject: function(req, res){
-    res.render('admin/clients/new_project.ejs');
+    let id = req.params.id;
+    Client.findById(id, function(err, client){
+      if(err) res.render('error', {error:err});
+      res.render('admin/clients/new_project.ejs', {client: client});
+    });
+
   },
   postNewProject: function(req, res){
+    let id = req.params.id;
+    Client.findById(id, function(err, client){
+      if(err) res.render(error, {error: err});
+      else {
+        if(client){
+          let projects = client.projects;
+        }
+      }
+    });
 
   },
   getEditClient: function(req, res){

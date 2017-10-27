@@ -11,9 +11,9 @@
   <div class="list-group">
     <% for(var i = 0; i < clients.length; i++) { %>
       <div class="list-group-item">
-        <a href="/clients/<%= clients[i]._id %>"
+        <a href="/clients/<%= clients[i]._id %>">
             <h4 class="list-group-item-heading">
-              <%= clients[i].name %>
+              <i class="fa fa-university"></i> <%= clients[i].name %>
             </h4>
             <p class="list-group-item-text">
               <%= clients[i].desc %>
