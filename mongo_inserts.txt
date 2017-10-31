@@ -1,31 +1,4 @@
-{
-  name: 'Banplus',
-  desc: 'Banco privado de Venezuela',
-  address: 'Paseo Las Merces',
-  domainEmail: '@banplus.com.ve',
-  logo: '/public/images/logo.png',
-  projects: [
-    {
-      _id: ObjectId("59591ff78b0bf36ffcccdd02"),
-      name: 'Finanzas Internas',
-      accessRole: ['manager']
-    },
-    {
-      _id: ObjectId("59610fd82420019225c1080d"),
-      name: 'Gestion TDC',
-      accessRole: ['specialist', 'manager']
-    }
-  ]
-}
+{name: 'Banplus',desc: 'Banco privado de Venezuela',address: 'Paseo Las Merces',domainEmail: '@banplus.com.ve',logo: '/public/images/logo.png',projects: [{_id: ObjectId("59610fd82420019225c1080d"),name: 'Gestion TDC',accessRole: ['specialist', 'manager']}]}
 
 
-{username: 'admin',
-password: '$2a$08$Epfl0baxsItTDthvN/DzDOlkOOL4ZHhsKZwLIu2dJ8sje8ojvn0A6',
-email: 'manager@pranical.com',
-role: 'admin',
-status: {verified:true},
-name: 'admin',
-lastname: 'admin',
-phone: '231231321',
-photo: '/public/images/photo.jpg',
-working_on: [ObjectId("59c804ede972e414f2d8e9ce")]}
+{username: 'admin',password: '$2a$08$Epfl0baxsItTDthvN/DzDOlkOOL4ZHhsKZwLIu2dJ8sje8ojvn0A6',email: 'manager@pranical.com',role: 'admin',status: {verified:true},name: 'admin',lastname:'admin',phone:'231231321',photo:'/public/images/photo.jpg',working_on: [ObjectId("59c804ede972e414f2d8e9ce")]}
