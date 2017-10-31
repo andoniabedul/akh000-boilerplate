@@ -17,6 +17,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const auth = require('../middleware/auth');
 const Client = require('../model/client');
+const mkdirp = require('mkdirp');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   getClients: function(req, res){
@@ -38,7 +41,7 @@ module.exports = {
     let id = req.params.id;
     Client.findById(id, function(err, client){
       if(err) res.render('error', {error:err});
-      projects = client.projects.filter((project)=>{
+      let projects = client.projects.filter((project)=>{
         return project.accessRole.includes(req.user.role) === true || req.user.role === "admin";
       });
       res.render('clients/projects', {client: client, projects: projects});
@@ -47,12 +50,29 @@ module.exports = {
   // AQUI VA EL FILE MANAGER
   getProject: function(req, res){
     let id = req.params.id;
+    let projectId = req.params.projectId;
     Client.findById(id, function(err, client){
       if(err) res.render('error', {error:err});
-      projects = client.projects.filter((project)=>{
+      let projects = client.projects.filter((project)=>{
         return project.accessRole.includes(req.user.role) === true || req.user.role === "admin";
       });
-      res.render('clients/project', {client: client, projects: projects});
+      let project = projects.filter((project)=>{
+        return project._id.toString() === projectId;
+      })[0];
+      let projectPath = `./public/system/${client.name}/${project.name}/`;
+      let dir = '';
+      if(req.query.path){
+        dir = projectPath + req.query.path;
+      } else {
+        dir = projectPath;
+      }
+      fs.readdir(dir, function(err, filenames) {
+        if(err) {
+          return res.render('error', {error: err});
+        } else {
+          return res.render('clients/project', {client: client, dirs: filenames, project: project});;
+        }
+      });
     });
   },
   getNewClient: function(req, res){
@@ -79,7 +99,13 @@ module.exports = {
             Client.createClient(client, function(err, client){
               if(err) res.render('error', {error:err});
               else {
-                res.render('admin/clients/new', {success_msg: 'Cliente creado satisfactoriamente', client: client});
+                let path = `./public/${client.name}`;
+                mkdirp(path, (err)=>{
+                  if(err) return res.render('error', {error: err});
+                  else {
+                    res.render('admin/clients/new', {success_msg: 'Cliente creado satisfactoriamente', client: client});
+                  }
+                });
               }
             });
           }
@@ -93,19 +119,69 @@ module.exports = {
       if(err) res.render('error', {error:err});
       res.render('admin/clients/new_project.ejs', {client: client});
     });
-
   },
   postNewProject: function(req, res){
-    let id = req.params.id;
-    Client.findById(id, function(err, client){
-      if(err) res.render(error, {error: err});
-      else {
-        if(client){
-          let projects = client.projects;
-        }
+    req.checkBody('name','Nombre es requerido').notEmpty();
+    let errors = req.validationErrors();
+    if (errors) {
+      res.render('admin/clients/new', {errors: errors});
+    } else {
+      if(req.params.id){
+        let id = req.params.id;
+        let name = req.body.name;
+        let desc = (req.body.desc)? req.body.desc: '';
+        let accessRole = req.body.roles;
+        Client.findById(id, function(err, client){
+          if(err) res.render('error', {error: err, message: ''});
+          else {
+            if(client){
+              let project = {name: name, desc: desc, accessRole: accessRole};
+              Client.createProject(id, project, function(err, client){
+                if(err) return res.render('error', {error: err});
+                else {
+                  if(client){
+                    mkdirp(`./public/${client.name}/${project.name}`, (err)=>{
+                      if(err) return res.render('error', {error: err})
+                      else {
+                        let path = `./public/system/${client.name}/${project.name}`;
+                        let phases = [
+                          `${path}/01.Inicio`,
+                          `${path}/02.Planificación`,
+                          `${path}/02.Planificación/Cronograma`,
+                          `${path}/02.Planificación/Actividades`,
+                          `${path}/03.Ejecución/01.Análisis`,
+                          `${path}/03.Ejecución/02.Diseño`,
+                          `${path}/03.Ejecución/03.Construcción`,
+                          `${path}/03.Ejecución/04.Trancisión`,
+                          `${path}/03.Ejecución/04.Trancisión/Soporte`,
+                          `${path}/03.Ejecución/04.Trancisión/Guias`,
+                          `${path}/03.Ejecución/04.Trancisión/Capacitación`,
+                          `${path}/03.Ejecución/05.Calidad`,
+                          `${path}/04.Seguimiento`,
+                          `${path}/04.Seguimiento/Minutas`,
+                          `${path}/04.Seguimiento/Informes`,
+                          `${path}/04.Seguimiento/ControlHoras`,
+                          `${path}/04.Seguimiento/Comunicados`,
+                          `${path}/05.Cierre`
+                        ];
+                        phases.forEach((phase)=>{
+                          mkdirp(phase, (err)=>{
+                            if(err) return err;
+                          });
+                        });
+                        res.render('admin/clients/new_project', {success_msg:'Creado satisfactoriamente el proyecto ' + project.name, client: client});
+                      }
+                    });
+                  } else {
+                    res.render('admin/clients/new_project', {error_msg: 'Ocurrió un error creando el proyecto', client: client});
+                  }
+                }
+              });
+            }
+          }
+        });
       }
-    });
-
+    }
   },
   getEditClient: function(req, res){
 

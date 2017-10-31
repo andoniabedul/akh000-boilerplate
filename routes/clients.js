@@ -8,7 +8,6 @@ const clientController = require('../controllers/client');
 
 router.get('/', auth.ensureAuthenticated, clientController.getClients);
 router.get('/:id', auth.ensureAuthenticated, clientController.getClient);
-router.get('/:id/projects/project', auth.ensureAuthenticated, clientController.getProject);
-
+router.get('/:id/projects/:projectId/project', auth.ensureAuthenticated, clientController.getProject);
 
 module.exports = router;

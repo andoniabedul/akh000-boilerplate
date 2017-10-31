@@ -1,20 +1,30 @@
 <% include ../layout %>
 <div class="row">
-  <h3> Proyecto <%= projects[0].name %>
+  <h3> Proyecto <%= project.name %>
   <span class="pull-right">
     <%=client.name%>
   </span>
 
   </h3>
   <hr>
+  <div>
+    <%= JSON.stringify(project) %>
+  </div>
   <div class="list-group">
-    <div class="list-group-item">
-      <a class="link" href="#">
-          <h4 class="list-group-item-heading">
-            <i class="fa fa-folder"></i> Inicio
-          </h4>
-      </a>
-    </div>
+    <% if(dirs.length > 0){ %>
+      <% for(var i=0; i < dirs.length; i++) { %>
+        <div class="list-group-item">
+          <a class="link" href="?path=<%=dirs[i]%>">
+              <h4 class="list-group-item-heading">
+                <i class="fa fa-folder"></i> <%= dirs[i] %>
+              </h4>
+          </a>
+        </div>
+      <% } %>
+    <% } else { %>
+      No existen archivos en este directorio por los momentos
+    <% } %>
+    <!--
     <div class="list-group-item">
       <a class="link" href="#">
           <h4 class="list-group-item-heading">
@@ -50,6 +60,7 @@
           </h4>
       </a>
     </div>
+    -->
   </div>
 </div>
 <% include ../footer %>

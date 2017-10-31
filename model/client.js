@@ -83,10 +83,30 @@ module.exports.findByName = function(name, callback){
   });
 }
 
-module.exports.listProjects = function(idClient, callback){
+module.exports.listProjects = function(id, callback){
   let query = {'_id': ObjectID.createFromHexString(id)};
   Client.find(query, (err, client)=>{
     if(err) callback(err, null);
     callback(null, client.projects);
+  });
+}
+
+module.exports.createProject = function(idClient, project, callback){
+  let query = {'_id': ObjectID.createFromHexString(idClient)};
+  Client.findOne(query, (err, client)=>{
+    if(err) callback(err, null);
+    else {
+      if(client){
+        let id = mongoose.Types.ObjectId();
+        let projects = client.projects;
+        project._id = id;
+        projects.push(project);
+        client.projects = projects;
+        client.save();
+        callback(null, client);
+      } else {
+        callback(null, null)
+      }
+    }
   });
 }
