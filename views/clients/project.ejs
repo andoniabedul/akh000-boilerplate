@@ -1,5 +1,5 @@
 <% include ../layout %>
-<div class="row">
+<div class="container-fluid">
   <h3> Proyecto <%= project.name %>
   <span class="pull-right">
     <%=client.name%>
@@ -10,20 +10,49 @@
   <div>
     <%= JSON.stringify(project) %>
   </div>
-  <div class="list-group">
-    <% if(dirs.length > 0){ %>
-      <% for(var i=0; i < dirs.length; i++) { %>
-        <div class="list-group-item">
-          <a class="link" href="?path=<%=dirs[i]%>">
-              <h4 class="list-group-item-heading">
-                <i class="fa fa-folder"></i> <%= dirs[i] %>
-              </h4>
-          </a>
-        </div>
-      <% } %>
-    <% } else { %>
-      No existen archivos en este directorio por los momentos
-    <% } %>
+  <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tamaño (bytes)</th>
+                <th>Ultima vez modificado</th>
+            </tr>
+        </thead>
+        <tbody>
+          <% if(dirs.length > 0) { %>
+            <% for(var i=0; i < dirs.length; i++) { %>
+              <% if(dirs[i].folder) {%>
+
+                      <tr>
+                        <td>
+                          <a class="link" href="?path=<%=dirs[i].path%>">
+                            <i class="fa fa-folder"></i> <%= dirs[i].name %>
+                          </a>
+                        </td>
+                        <td><%= dirs[i].size %></td>
+                        <td><%= dirs[i].last_modified %></td>
+                      </tr>
+                  <% } else {%>
+                      <tr>
+                        <td>
+                          <a class="link" href="/documents/<%= dirs[i].name %>">
+                            <i class="fa fa-file"></i> <%= dirs[i].name %>
+                          </a>
+                        </td>
+                        <td><%= dirs[i].size %></td>
+                        <td><%= dirs[i].last_modified %></td>
+                      </tr>
+                    </a>
+                  <% } %>
+              </tr>
+            <% } %>
+          <% } else { %>
+            <tr>
+              No existen archivos en este directorio por los momentos
+            </tr>
+          <% } %>
+        </tbody>
+    </table>
     <!--
     <div class="list-group-item">
       <a class="link" href="#">
@@ -61,6 +90,5 @@
       </a>
     </div>
     -->
-  </div>
 </div>
 <% include ../footer %>

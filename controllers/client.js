@@ -53,24 +53,33 @@ module.exports = {
     let projectId = req.params.projectId;
     Client.findById(id, function(err, client){
       if(err) res.render('error', {error:err});
-      let projects = client.projects.filter((project)=>{
+      let project = client.projects.filter((project)=>{
         return project.accessRole.includes(req.user.role) === true || req.user.role === "admin";
-      });
-      let project = projects.filter((project)=>{
+      }).filter((project)=>{
         return project._id.toString() === projectId;
       })[0];
       let projectPath = `./public/system/${client.name}/${project.name}/`;
       let dir = '';
+      let backDir = '';
       if(req.query.path){
         dir = projectPath + req.query.path;
       } else {
         dir = projectPath;
       }
-      fs.readdir(dir, function(err, filenames) {
+      fs.readdir(dir, function(err, folders) {
         if(err) {
           return res.render('error', {error: err});
         } else {
-          return res.render('clients/project', {client: client, dirs: filenames, project: project});;
+          folders = folders.map((path)=>{
+            return {
+              folder: fs.statSync(`${dir}/${path}`).isDirectory(),
+              name: path,
+              path: (req.query.path)?`${req.query.path}/${path}`: path,
+              last_modified: fs.statSync(`${dir}/${path}`).mtime,
+              size: fs.statSync(`${dir}/${path}`).size
+            }
+          });
+          return res.render('clients/project', {client: client, dirs: folders, project: project});;
         }
       });
     });
