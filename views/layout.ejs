@@ -39,23 +39,27 @@
         <li class="menuDate"><div id="textDate"><i class="fa fa-calendar" aria-hidden="true"></i></div></li>
       </ul>
     </div>
-    <div class="container">
+    <div class="container-fluid">
+    <% if (success_msg !== '' && success_msg !== null && success_msg !== undefined && success_msg !== NaN) { %>
       <div class="row">
-        <% if (success_msg !== '' && success_msg !== null && success_msg !== undefined && success_msg !== NaN) { %>
-            <div class="alert alert-success"> <%= success_msg %> </div>
-        <% } %>
-        <% if (error_msg !== '' && error_msg !== null && error_msg !== undefined && error_msg !== NaN) { %>
-          <div class="alert alert-danger"> <%= error_msg %> </div>
-        <% } %>
-        <% if (errors !== '' && errors !== null && errors !== undefined && errors !== NaN) { %>
-          <div class="alert alert-danger">
-            There are <%= errors.length %> errors :
-            <ul>
-            <% for (var z=0; z < errors.length; z++){ %>
-              <li> <%= errors[z].msg %> </li>
-            <% } %>
-           </ul>
-          </div>
-        <% } %>
+        <div class="alert alert-success"> <%= success_msg %> </div>
       </div>
+    <% } %>
+    <% if (error_msg !== '' && error_msg !== null && error_msg !== undefined && error_msg !== NaN) { %>
       <div class="row">
+        <div class="alert alert-danger"> <%= error_msg %> </div>
+      </div>
+    <% } %>
+    <% if (errors !== '' && errors !== null && errors !== undefined && errors !== NaN) { %>
+      <div class="row">
+        <div class="alert alert-danger">
+          There are <%= errors.length %> errors :
+          <ul>
+          <% for (var z=0; z < errors.length; z++){ %>
+            <li> <%= errors[z].msg %> </li>
+          <% } %>
+         </ul>
+        </div>
+      </div>
+    <% } %>
+    <div class="row wrapper">

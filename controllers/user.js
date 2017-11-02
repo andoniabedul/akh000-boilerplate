@@ -28,7 +28,15 @@ module.exports = {
     let username = req.params.username;
     User.getUserByUsername(username, function(err, user){
       if(err) res.render('error', {user: req.user, error: err});
-      res.render('admin/users/user', {user: req.user, requestedUser: user});
+      Client.findClientsById(user.working_on, function(err, clients){
+        if(err) return res.render('error', {error: err});
+        else {
+          let userClients = clients.map((client)=>{
+            return client.name;
+          });
+          res.render('admin/users/user', {user: req.user, userClients: userClients, requestedUser: user});
+        }
+      });
     });
   },
   postUser: function(req, res){

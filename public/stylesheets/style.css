@@ -8,7 +8,8 @@ body {
   background-repeat: no-repeat !important;
   background-attachment: fixed;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  min-height: 100%; }
 
 a {
   color: #00B7FF;
@@ -21,14 +22,16 @@ button {
   text-decoration: none; }
 
 .wrapper {
-  width: 100%;
-  height: 100%; }
+  padding-bottom: 1%; }
 
 .menuItem {
   border-bottom: 2px solid #00B7FF;
   background-color: white; }
   .menuItem li a {
     color: #00B7FF; }
+
+.navbar {
+  margin-bottom: 0px !important; }
 
 .navbar-default .navbar-nav li a {
   color: #00B7FF; }
@@ -72,5 +75,13 @@ footer {
 .footerMsg {
   padding: 0.7%;
   margin: 0 auto; }
+
+.dirInfo {
+  padding: 1%; }
+
+.filebar {
+  background-color: #d7d7d7;
+  height: 90vh;
+  border-radius: 0px 5px 5px 0px; }
 
 /*# sourceMappingURL=style.css.map */

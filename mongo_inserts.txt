@@ -2,3 +2,25 @@
 
 
 {username: 'admin',password: '$2a$08$Epfl0baxsItTDthvN/DzDOlkOOL4ZHhsKZwLIu2dJ8sje8ojvn0A6',email: 'manager@pranical.com',role: 'admin',status: {verified:true},name: 'admin',lastname:'admin',phone:'231231321',photo:'/public/images/photo.jpg',working_on: [ObjectId("59c804ede972e414f2d8e9ce")]}
+
+{
+"_id" : ObjectId("59f7d724627886446a85af0f"),
+"domainEmail" : "@google.com",
+"address" : "Mountain View, EEUU",
+"desc" : "Empresa de busqueda",
+"name" : "Google",
+"created_at" : ISODate("2017-10-31T01:51:32.813Z"),
+"projects" : [
+{
+"name" : "AngularJS",
+"desc" : "Framework para la vista basado en TS",
+"_id" : ObjectId("59f7dbcd5302a44559cd499d"),
+"created_at" : ISODate("2017-10-31T02:10:53.444Z"),
+"accessRole" : [
+"specialist",
+"manager",
+"admin"
+]
+}
+],
+}

@@ -1,5 +1,5 @@
 <% include ../layout %>
-<div class="row">
+<div class="container">
   <h3> Proyectos de <%= client.name %>
     <% if(user.role==='admin') { %>
       <a href="/admin/clients/<%= client._id %>/projects/new"> + </a>

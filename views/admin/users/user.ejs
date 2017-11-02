@@ -1,4 +1,5 @@
 <% include ../../layout %>
+<div class="container">
   <h3> Editing user: <%= requestedUser.username %> </h3>
   <hr>
   <div class="form-group normalForm">
@@ -20,7 +21,7 @@
       class="form-control" value="<%= requestedUser.role %>" disabled>
 
       <label for="lastname">Working on: </label>
-      <input type="text" name="working_on" value="<%= requestedUser.working_on %>"
+      <input type="text" name="working_on" value="<%= userClients %>"
       class="form-control" disabled>
 
       <label for="phone">Teléfono: </label>
@@ -50,6 +51,7 @@
     </form>
     -->
   </div>
+</div>
 <% include ../../footer %>
 
 <script type="text/javascript">

@@ -1,5 +1,6 @@
 <% include ../layout %>
-<div class="row">
+<div class="container">
+
   <h3>Clientes
     <% if(user.role==='admin') { %>
       <a href="/admin/clients/new">
@@ -21,5 +22,6 @@
       </div>
     <% } %>
   </div>
-</div>
+
+  </div>
 <% include ../footer %>

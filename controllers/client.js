@@ -59,13 +59,9 @@ module.exports = {
         return project._id.toString() === projectId;
       })[0];
       let projectPath = `./public/system/${client.name}/${project.name}/`;
-      let dir = '';
-      let backDir = '';
-      if(req.query.path){
-        dir = projectPath + req.query.path;
-      } else {
-        dir = projectPath;
-      }
+      let dir = (req.query.path && req.query.path !== '/')? projectPath + req.query.path : projectPath;
+      let actualPath = (req.query.path && req.query.path !== '/')? `/${req.query.path}` : '/';
+      actualPath = (actualPath.length===1)? ['/'] : actualPath.split('/');
       fs.readdir(dir, function(err, folders) {
         if(err) {
           return res.render('error', {error: err});
@@ -74,12 +70,12 @@ module.exports = {
             return {
               folder: fs.statSync(`${dir}/${path}`).isDirectory(),
               name: path,
-              path: (req.query.path)?`${req.query.path}/${path}`: path,
+              path: (req.query.path)? `${req.query.path}/${path}`: path,
               last_modified: fs.statSync(`${dir}/${path}`).mtime,
               size: fs.statSync(`${dir}/${path}`).size
             }
           });
-          return res.render('clients/project', {client: client, dirs: folders, project: project});;
+          return res.render('clients/project', {client: client, dirs: folders, actualPath: actualPath, project: project});;
         }
       });
     });

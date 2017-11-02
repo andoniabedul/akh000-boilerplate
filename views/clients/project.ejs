@@ -1,28 +1,56 @@
 <% include ../layout %>
-<div class="container-fluid">
-  <h3> Proyecto <%= project.name %>
-  <span class="pull-right">
-    <%=client.name%>
-  </span>
-
-  </h3>
-  <hr>
-  <div>
-    <%= JSON.stringify(project) %>
-  </div>
-  <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Tamaño (bytes)</th>
-                <th>Ultima vez modificado</th>
-            </tr>
-        </thead>
-        <tbody>
-          <% if(dirs.length > 0) { %>
+<div class="col-md-3 filebar">
+    <h4> Cliente: <%=client.name%> </h4>
+    <h5> Proyecto: <%= project.name %> </h5>
+    <hr>
+    <p> <%= project.desc %> </p>
+    <p class="date"> Creado el <%= project.created_at %> </p>
+</div>
+<div class="col-md-9">
+  <div class="container-fluid">
+      <div class="row dirInfo">
+        <% if(actualPath.length === 1) {%>
+          <div class="col-md-12">
+            <h4>
+                <a href="/clients/<%=client._id%>/projects/<%=project._id%>/project"> <i class="fa fa-home fa-2"></i> </a>
+            </h4>
+          </div>
+        <% } else { %>
+            <div class="col-md-9">
+              <h4>
+              <% for(var i=0; i < actualPath.length; i++){ %>
+                <% if(i===0) { %>
+                  <a href="/clients/<%=client._id%>/projects/<%=project._id%>/project">
+                   <i class="fa fa-home fa-2"></i>
+                  </a>
+                  <i class="fa fa-arrow-right"></i>
+                <% } else { %>
+                  <a href="?path=<%= actualPath[i] %>"> <%= actualPath[i] %> </a>
+                  <% if(i !== actualPath.length-1) {%>
+                    <i class="fa fa-arrow-right"></i>
+                  <% } %>
+                <% } %>
+              <% } %>
+              </h4>
+            </div>
+            <div class="col-md-3">
+              <button id="upload" class="btn btn-primary"> Subir documento </button>
+            </div>
+        <% } %>
+      </div>
+    <hr>
+    <% if(dirs.length > 0) { %>
+      <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tamaño (bytes)</th>
+                    <th>Ultima vez modificado</th>
+                </tr>
+            </thead>
+            <tbody>
             <% for(var i=0; i < dirs.length; i++) { %>
               <% if(dirs[i].folder) {%>
-
                       <tr>
                         <td>
                           <a class="link" href="?path=<%=dirs[i].path%>">
@@ -30,7 +58,7 @@
                           </a>
                         </td>
                         <td><%= dirs[i].size %></td>
-                        <td><%= dirs[i].last_modified %></td>
+                        <td class="date"><%= dirs[i].last_modified %></td>
                       </tr>
                   <% } else {%>
                       <tr>
@@ -40,55 +68,57 @@
                           </a>
                         </td>
                         <td><%= dirs[i].size %></td>
-                        <td><%= dirs[i].last_modified %></td>
+                        <td class="date"><%= dirs[i].last_modified %></td>
                       </tr>
                     </a>
                   <% } %>
               </tr>
             <% } %>
-          <% } else { %>
-            <tr>
-              No existen archivos en este directorio por los momentos
-            </tr>
-          <% } %>
-        </tbody>
-    </table>
-    <!--
-    <div class="list-group-item">
-      <a class="link" href="#">
-          <h4 class="list-group-item-heading">
-            <i class="fa fa-folder"></i> Planificacion
-          </h4>
-      </a>
-    </div>
-    <div class="list-group-item">
-      <a class="link" href="#">
-          <h4 class="list-group-item-heading">
-            <i class="fa fa-folder"></i> Ejecución
-          </h4>
-      </a>
-    </div>
-    <div class="list-group-item">
-      <a class="link" href="#">
-          <h4 class="list-group-item-heading">
-            <i class="fa fa-folder"></i> Seguimiento y Control
-          </h4>
-      </a>
-    </div>
-    <div class="list-group-item">
-      <a class="link" href="#">
-          <h4 class="list-group-item-heading">
-            <i class="fa fa-folder"></i> Trancisión
-          </h4>
-      </a>
-    </div>
-    <div class="list-group-item">
-      <a class="link" href="#">
-          <h4 class="list-group-item-heading">
-            <i class="fa fa-folder"></i> Otros
-          </h4>
-      </a>
-    </div>
-    -->
+            </tbody>
+        </table>
+    <% } else { %>
+      <tr>
+        No existen archivos en este directorio por los momentos
+      </tr>
+    <% } %>
+      <!--
+      <div class="list-group-item">
+        <a class="link" href="#">
+            <h4 class="list-group-item-heading">
+              <i class="fa fa-folder"></i> Planificacion
+            </h4>
+        </a>
+      </div>
+      <div class="list-group-item">
+        <a class="link" href="#">
+            <h4 class="list-group-item-heading">
+              <i class="fa fa-folder"></i> Ejecución
+            </h4>
+        </a>
+      </div>
+      <div class="list-group-item">
+        <a class="link" href="#">
+            <h4 class="list-group-item-heading">
+              <i class="fa fa-folder"></i> Seguimiento y Control
+            </h4>
+        </a>
+      </div>
+      <div class="list-group-item">
+        <a class="link" href="#">
+            <h4 class="list-group-item-heading">
+              <i class="fa fa-folder"></i> Trancisión
+            </h4>
+        </a>
+      </div>
+      <div class="list-group-item">
+        <a class="link" href="#">
+            <h4 class="list-group-item-heading">
+              <i class="fa fa-folder"></i> Otros
+            </h4>
+        </a>
+      </div>
+      -->
+  </div>
 </div>
+
 <% include ../footer %>
