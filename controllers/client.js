@@ -47,7 +47,6 @@ module.exports = {
       res.render('clients/projects', {client: client, projects: projects});
     });
   },
-  // AQUI VA EL FILE MANAGER
   getProject: function(req, res){
     let id = req.params.id;
     let projectId = req.params.projectId;

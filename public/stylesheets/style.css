@@ -84,4 +84,7 @@ footer {
   height: 90vh;
   border-radius: 0px 5px 5px 0px; }
 
+.box__dragndrop, .box__uploading, .box__success, .box__error {
+  display: none; }
+
 /*# sourceMappingURL=style.css.map */
