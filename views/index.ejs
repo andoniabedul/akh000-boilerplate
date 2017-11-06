@@ -6,13 +6,34 @@
     Sistema de administración, gestión y registro de contenidos documentales
     </h4>
     <hr>
-    <a href="/clients">
-      <div width="300px" heigth="300px" style="margin: 0 auto">
-        <span>
-          Ir a tus clientes
-        </span>
+    <div class="row">
+      <div class="col-md-6">
+        <% if(clients) { %>
+          <h4>Clientes en los que trabajas actualmente</h4>
+          <hr>
+          <div class="list-group">
+            <% for(var i = 0; i < clients.length; i++) { %>
+              <div class="list-group-item">
+                <a href="/clients/<%= clients[i]._id %>">
+                    <h4 class="list-group-item-heading">
+                      <i class="fa fa-university"></i> <%= clients[i].name %>
+                    </h4>
+                    <p class="list-group-item-text">
+                      <%= clients[i].desc %>
+                    </p>
+                </a>
+              </div>
+            <% } %>
+          </div>
+        <% } else { %>
+          <p>Aun no tienes ningun cliente agregado</p>
+        <% } %>
       </div>
-    </a>
+      <div class="col-md-6">
+        <h4>Ultimos documentos subidos</h4>
+        <hr>
+      </div>
+    </div>
   <!--
     <div class="list-group">
       <% for(var i = 0; i < clients.length; i++) { %>

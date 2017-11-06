@@ -1,11 +1,10 @@
 <% include ../layout %>
 <div class="container">
-
   <h3>Clientes
     <% if(user.role==='admin') { %>
-      <a href="/admin/clients/new">
+      <button class="btn btn-success" data-toggle="modal" data-target="#myModal">
         +
-      </a>
+      </button>
     <% } %>
   </h3>
   <hr>
@@ -19,9 +18,25 @@
             <p class="list-group-item-text">
               <%= clients[i].desc %>
             </p>
+        </a>
       </div>
+
     <% } %>
   </div>
-
+</div>
+<% if(user.role === 'admin') { %>
+  <div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Agregar nuevo cliente</h4>
+        </div>
+        <div class="modal-body">
+          <% include ../admin/clients/new %>
+        </div>
+      </div>
+    </div>
   </div>
+<% } %>
 <% include ../footer %>

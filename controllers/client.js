@@ -20,6 +20,78 @@ const Client = require('../model/client');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
+const imgExtension = ['.JPG', '.PNG', '.JPEG']
+const docExtension = ['.PDF', '.DOC', '.DOCX', '.XLS','.XLSX','.PPT', '.PPTX'];
+const fileExtensionPatter = /\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/;
+
+let storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    let extension = file.originalname.match(fileExtensionPatter)[0].toUpperCase();
+    console.log('extension: ' + extension);
+    console.log('destination: ' + imgExtension.includes(extension));
+    if(imgExtension.includes(extension)){
+      callback(null, './public/images/');
+    } else if(docExtension.includes(extension)) {
+      callback(null, './public/system/');
+    }
+  },
+  filename: function (req, file, callback) {
+    let extension = file.originalname.match(fileExtensionPatter)[0].toUpperCase();
+    if(imgExtension.includes(extension)){
+      callback(null, 'IMAGE_'+ file.fieldname.toUpperCase() + '_' + Date.now() + extension);
+    } else if (docExtension.includes(extension)){
+      let pdfDocument = file.originalname.split('_');
+      extension = extension.toLowerCase();
+      let typeDoc = pdfDocument[0];
+      let period = '';
+      switch (typeDoc) {
+        case 'FAC':
+          period = pdfDocument[1].substring(0, 6);
+          let year = period.substring(0,4);
+          let month = period.substring(4,6);
+          if(month < 12 && month > 0 && year > 2014 && year < 2018){
+            callback(null, typeDoc + '_' + period + extension);
+          } else {
+            let error = "Fecha no valida, debe ser con formato AAAAMM, entre 2015 y 2017";
+            callback(error, null);
+          }
+          break;
+        case 'COB':
+          period = pdfDocument[1].substring(0, 6);
+          callback(null, typeDoc + '_' + period + extension);
+          break;
+        case 'INF':
+          period = pdfDocument[1].split('.')[0];
+          if(period === 'ANUAL' || period === 'TRIMESTRAL'){
+            callback(null, typeDoc + '_' + period + extension);
+          } else {
+            let error = 'Período no correcto, debe ser ANUAL o TRIMESTRAL';
+            callback(error);
+          }
+          break;
+        case 'LEG':
+          let type = pdfDocument[1].substring(0, 1);
+          if(type < 7 && type > 0){
+            callback(null, typeDoc + '_' + type + extension);
+          } else {
+            let error = 'Formato incorrecto. El formato debe ser LEG_N donde N es un numero del 1 al 6.'
+            callback(error, null);
+          }
+          break;
+        case 'ORG':
+          callback(null, typeDoc + '_1'+ extension);
+          break;
+        default:
+          let error = 'No se reconoció el tipo de documento.'
+          callback(error, null);
+      }
+    }
+  }
+});
+
+let uploadLogo = multer({ storage : storage}).single('logo');
+let uploadDocument = multer({storage: storage}).single('document');
 
 module.exports = {
   getClients: function(req, res){
@@ -60,6 +132,7 @@ module.exports = {
       let projectPath = `./public/system/${client.name}/${project.name}/`;
       let dir = (req.query.path && req.query.path !== '/')? projectPath + req.query.path : projectPath;
       let actualPath = (req.query.path && req.query.path !== '/')? `/${req.query.path}` : '/';
+      let pathFolder = actualPath;
       actualPath = (actualPath.length===1)? ['/'] : actualPath.split('/');
       fs.readdir(dir, function(err, folders) {
         if(err) {
@@ -74,7 +147,7 @@ module.exports = {
               size: fs.statSync(`${dir}/${path}`).size
             }
           });
-          return res.render('clients/project', {client: client, dirs: folders, actualPath: actualPath, project: project});;
+          return res.render('clients/project', {client: client, dirs: folders, pathFolder: pathFolder, actualPath: actualPath, project: project});;
         }
       });
     });
@@ -83,39 +156,47 @@ module.exports = {
     res.render('admin/clients/new');
   },
   postNewClient: function(req, res){
-    req.checkBody('name','Nombre es requerido').notEmpty();
-    req.checkBody('domainEmail', 'Dominio de correo es requerido').notEmpty();
-    let errors = req.validationErrors();
-    if (errors) {
-      res.render('admin/clients/new', {errors: errors});
-    } else {
-      Client.findByName(req.body.name, function(err, client){
-        if(err) res.render('error', {error: err});
-        else {
-          if(client){
-            res.render('admin/clients/new', {error_msg: 'Ya existe un cliente con ese nombre'});
-          } else {
-            let client = new Client();
-            client.name = req.body.name;
-            client.address = (req.body.address)? req.body.address:'';
-            client.desc = (req.body.desc)? req.body.desc:'';
-            client.domainEmail = req.body.domainEmail;
-            Client.createClient(client, function(err, client){
-              if(err) res.render('error', {error:err});
-              else {
-                let path = `./public/${client.name}`;
-                mkdirp(path, (err)=>{
-                  if(err) return res.render('error', {error: err});
+    uploadLogo(req, res, function(err){
+      if(err) return res.render('error', {error: err})
+      else {
+        req.checkBody('name','Nombre es requerido').notEmpty();
+        req.checkBody('domainEmail', 'Dominio de correo es requerido').notEmpty();
+        let errors = req.validationErrors();
+        if (errors) {
+          res.render('admin/clients/new', {errors: errors});
+        } else {
+          Client.findByName(req.body.name, function(err, client){
+            if(err) res.render('error', {error: err});
+            else {
+              if(client){
+                res.render('admin/clients/new', {error_msg: 'Ya existe un cliente con ese nombre'});
+              } else {
+                console.log(JSON.stringify(req.files));
+                let client = new Client();
+                client.name = req.body.name;
+                client.address = (req.body.address)? req.body.address:'';
+                client.desc = (req.body.desc)? req.body.desc:'';
+                client.domainEmail = req.body.domainEmail;
+                client.logo = req.file.path;
+                Client.createClient(client, function(err, client){
+                  if(err) res.render('error', {error:err});
                   else {
-                    res.render('admin/clients/new', {success_msg: 'Cliente creado satisfactoriamente', client: client});
+                    let path = `./public/${client.name}`;
+                    mkdirp(path, (err)=>{
+                      if(err) return res.render('error', {error: err});
+                      else {
+                        res.redirect('/clients');
+                      }
+                    });
                   }
                 });
               }
-            });
-          }
+            }
+          });
+
         }
-      });
-    }
+      }
+    });
   },
   getNewProject: function(req, res){
     let id = req.params.id;

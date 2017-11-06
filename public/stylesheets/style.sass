@@ -22,47 +22,74 @@ button
   padding-bottom: 1%
 
 .menuItem
-  border-bottom: 2px solid #00B7FF
-  background-color: white
+  border-bottom: 4px solid #00B7FF
   li a
-    color: #00B7FF
+    color: #3E7CB1
+.logo
+  width: 125px
+  height: 55px
+  padding: none
 .navbar
   margin-bottom: 0px !important
+.navbar-default
+  background-color: #054A91 !important
+  border: none
+  color:white
+  padding-right: none !important
+.navbar-collapse
+  padding-right: 0px
+  padding-left: 0px
 .navbar-default .navbar-nav
   li
     a
-      color: #00B7FF
+      color: white
   li:hover
     a
-      color: #337ab7
+      color: white
 .menuDate
   padding: 13px
 #textDate
   border: 1px solid #00B7FF
-  color: #00B7FF
+  color: white
   border-radius: 5px
   padding: 3px
 
 .menuItem:hover
-  border-bottom: 2px solid #337ab7
+  border-bottom: 4px solid white
 
 .menuButton
   padding: 2%
   color: white
   border-radius: 5px
   background-color: #0B2161
-
+.form-control:focus
+  border-color: #054A91
+  box-shadow: inset 0 1px 1px rgba(5, 74, 145, 0.4), 0 0 8px rgba(5, 74, 145, 0.4)
+.profileForm
+  height: 600px
+  margin: 0 auto
+  img
+    width: 100px
+    height: 100px
+    margin-right: 1%
 .normalForm
-  width: 50%
   margin: 0 auto
   input
     margin-bottom: 2%
+  input[type=checkbox]
+    border: 1px solid #F17300
   label
-    border: 1px solid #00B7FF
+    border: 1px solid #054A91
     padding: 1%
-    color: #00B7FF
+    color: #054A91
     border-radius: 5px
 
+.specialLabel
+  border: 1px solid #F17300
+  padding: 1.5%
+  margin: 1%
+  color: #F17300
+  border-radius: 5px
 footer
   background-color: #224680
   color: #FFF
@@ -74,9 +101,25 @@ footer
   padding: 1%
 
 .filebar
-  background-color: #d7d7d7
-  height: 90vh
+  background-color: #054A91
+  height: 91vh
   border-radius: 0px 5px 5px 0px
+  color: white
 
-.box__dragndrop, .box__uploading, .box__success, .box__error 
+.box__dragndrop, .box__uploading, .box__success, .box__error
   display: none
+
+input[type=checkbox]
+  display: none
+  + label span
+    display: inline-block
+    width: 19px
+    height: 19px
+    margin: -2px 10px 0 0
+    vertical-align: middle
+    background: url(/images/check_radio_sheet.png) left top no-repeat
+    cursor: pointer
+
+input[type=checkbox]:checked
+  + label span
+    background: url(/images/check_radio_sheet.png) -19px top no-repeat

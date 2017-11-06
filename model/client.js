@@ -26,8 +26,9 @@ var ClientSchema = mongoose.Schema({
     desc: {type: String},
     address: {type:String},
     domainEmail: {type: String, required: true},
-    logo: {type:String},
+    logo: {type:String, required:true},
     projects : [ProjectSchema],
+    template: {type: String, default:'/system/genericTemplate.docx'},
     created_at: {type: Date, default: Date.now}
 });
 

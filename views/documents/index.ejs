@@ -1,0 +1,31 @@
+<% include ../layout %>
+
+    <div class="col-md-3 filebar">
+        <h4> Cliente: <a href="/clients/<%= client._id%>"> <%=client.name%> </a></h4>
+        <h5> Proyecto: <%= project.name %> </h5>
+        <p id="projectDate"></p>
+        <p> Descripción: <%= project.desc %> </p>
+        <br>
+        <div style="margin-right: 30%; margin-left: 30%">
+          <a href="<%= client.template %>" download>
+             <button type="button" name="button" class="btn btn-success">
+               <i class="fa fa-cloud-download" aria-hidden="true"></i> Plantilla </button>
+          </a>
+        </div>
+        <hr style="border: 1px solid #F17300">
+        <p> Dominio de correo: <span class="specialLabel"> <%=client.domainEmail%> </span></p>
+    </div>
+    <div class="col-md-9">
+      <div class="container">
+        <% if(document.extension === '.DOCX' || document.extension === '.XLSX' || document.extension === '.XLS' || document.extension === '.DOC' || document.extension === '.PPTX' || document.extension === '.PPT') { %>
+
+          <iframe src="http://docs.google.com/gview?url=http://localhost:3005/public/system/Google/AngularJS/03.Ejecuci%C3%B3n/Construcci%C3%B3n/InformeFinalSeminario_59ffdcf6ffb0ce7555c6f9cc.DOCX&embedded=true"></iframe>
+
+        <% } else if(document.extension === '.PDF') { %>
+          <object data="<%= document %>" type="application/pdf" width="100%" height="95%"></object>
+        <% } %>
+      </div>
+    </div>
+
+
+<% include ../footer %>

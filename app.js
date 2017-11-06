@@ -22,6 +22,7 @@ const root = require('./routes/root');
 const users = require('./routes/users');
 const clients = require('./routes/clients');
 const admin = require('./routes/admin');
+const documents = require('./routes/documents');
 
 // MODELS
 const User = require('./model/user');
@@ -79,7 +80,7 @@ app.use('/', root);
 app.use('/users', users);
 app.use('/clients', clients);
 app.use('/admin', admin);
-
+app.use('/documents', documents);
 // PASSPORT LOCAL STRATEGY
 passport.use(new LocalStrategy(auth.authenticate));
 passport.serializeUser(auth.serializeUser);

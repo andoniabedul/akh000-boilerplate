@@ -1,8 +1,7 @@
-<% include ../../layout %>
-<div class="container">
-  <h3>Crear cliente</h3>
-  <form action="/admin/clients/new" method="post">
+  <form action="/admin/clients/new" method="POST" enctype="multipart/form-data">
     <div class="form-group normalForm">
+      <label for="logo">Logo: </label>
+      <input type="file" name="logo">
       <label for="name">Nombre: </label>
       <input type="text" name="name" placeholder="" class="form-control">
       <label for="desc">Descripcion: </label>
@@ -12,10 +11,6 @@
       <label for="name">Dominio de correo: </label>
       <input type="text" name="domainEmail" placeholder="" class="form-control">
     </div>
+    <hr>
     <button type="submit" class="btn btn-success" name="button">Crear</button>
-    <a href="/">
-      <button type="button" class="btn btn-danger" name="button">Cancelar</button>
-    </a>
   </form>
-</div>
-<% include ../../footer %>

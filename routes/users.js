@@ -9,6 +9,7 @@ router.post('/login', userController.postLogin);
 // PROFILE OF A USER
 router.get('/profile', auth.ensureAuthenticated, userController.getProfile);
 router.post('/profile', auth.ensureAuthenticated, userController.postProfile);
+router.post('/profile/photo', auth.ensureAuthenticated, userController.postProfilePhoto);
 // LOGOUT
 router.get('/logout', userController.getLogout);
 

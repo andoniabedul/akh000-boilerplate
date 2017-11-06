@@ -15,7 +15,7 @@ var UserSchema = mongoose.Schema({
     name: {type: String},
     lastname: {type: String},
     phone: {type: String},
-    photo: {type: String},
+    photo: {type: String, default: './public/images/defaultUser.png'},
     working_on:{type: Array, required: true},
     active: {type: Boolean, default: true},
     created_at: {type: Date, default: Date.now}
@@ -137,3 +137,15 @@ module.exports.desactivateUser = function(user, callback){
     callback(null, user);
   });
 };
+
+module.exports.changeProfilePhoto = function(user, photoPath, callback){
+  let query = {username: user.username};
+  User.findOne(query, function(err, user){
+    if(err) return callback(err, null)
+    else {
+      user.photo = photoPath;
+      user.save();
+      callback(null, user);
+    }
+  });
+}

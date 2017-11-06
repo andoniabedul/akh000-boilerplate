@@ -1,38 +1,61 @@
 <% include ../layout %>
-  <h3> <%= user.username %> </h3>
-  <hr>
-  <div class="form-group normalForm">
-    <h4>Change your info</h4>
-    <br>
-    <form id="infoForm" action="profile" method="POST">
-      <label for="username">Username: </label>
-      <input type="text" name="username" value="<%= user.username %>" class="form-control" disabled>
-      <label for="name">Name: </label>
-      <input type="text" name="name" value="<%= user.name %>" class="form-control" disabled>
-      <label for="lastname">Lastname: </label>
-      <input type="text" name="lastname" value="<%= user.lastname %>" class="form-control" disabled>
-      <label for="lastname">Email: </label>
-      <input type="text" name="email" value="<%= user.email %>" class="form-control" disabled>
-      <input type="hidden" name="info" value="true">
-      <br>
-      <button class="btn btn-default" id="info" value="true" type="button" name="Edit">Edit</button>
-      <span class="btn btn-danger" type="hidden" id="cancelInfo">Cancel</span>
-    </form>
+
+  <div class="container">
+    <h3> Bienvenido, <%= user.username %> </h3>
+    <h4>este es tu perfil.</h4>
     <hr>
-    <form id="passwordForm" action="profile" method="POST">
-      <h4>Change your password</h4>
-      <br>
-      <label for="password">Old password: </label>
-      <input type="password" name="oldPassword" class="form-control" placeholder="Your password" disabled>
-      <label for="newPassword1">New password: </label>
-      <input type="password" name="newPassword1" class="form-control" placeholder="Your new password" disabled>
-      <label for="newPassword2">Repeat the new password: </label>
-      <input type="password" name="newPassword2" class="form-control" placeholder="Repeat your new password" disabled>
-      <input type="hidden" name="password" value="true">
-      <br>
-      <button class="btn btn-default" id="password" type="button" name="Edit" value="true">Edit</button>
-      <span class="btn btn-danger" type="hidden" id="cancelPassword">Cancel</span>
-    </form>
+    <div class="form-group normalForm profileForm">
+      <div class="col-md-3">
+        <form action="/users/profile/photo" method="POST" enctype="multipart/form-data">
+          <% if(user.photo) { %>
+            <h4>Cambia tu foto</h4>
+            <img src="<%= user.photo.substring(8, user.photo.length) %>" sytle="width: 250px; height: 250px" alt="">
+            <input type="file" name="userPhoto">
+            <button type="submit" class="btn btn-success" name="button">Subir</button>
+          <% } else { %>
+            <h4>Sube tu foto</h4>
+            <%= user.photo %>
+            <img src="/images/defaultUser.png" sytle="width: 250px; height: 250px" alt="">
+            <input type="file" name="userPhoto">
+            <button type="submit" class="btn btn-success" name="button">Subir</button>
+          <% } %>
+        </form>
+      </div>
+      <div class="col-md-4">
+        <form id="infoForm" action="profile" method="POST">
+          <h4>Change your info</h4>
+          <br>
+          <label for="username">Username: </label>
+          <input type="text" name="username" value="<%= user.username %>" class="form-control" disabled>
+          <label for="name">Name: </label>
+          <input type="text" name="name" value="<%= user.name %>" class="form-control" disabled>
+          <label for="lastname">Lastname: </label>
+          <input type="text" name="lastname" value="<%= user.lastname %>" class="form-control" disabled>
+          <label for="lastname">Email: </label>
+          <input type="text" name="email" value="<%= user.email %>" class="form-control" disabled>
+          <input type="hidden" name="info" value="true">
+          <br>
+          <button class="btn btn-default" id="info" value="true" type="button" name="Edit">Edit</button>
+          <span class="btn btn-danger" type="hidden" id="cancelInfo">Cancel</span>
+        </form>
+      </div>
+      <div class="col-md-4">
+        <form id="passwordForm" action="profile" method="POST">
+          <h4>Change your password</h4>
+          <br>
+          <label for="password">Old password: </label>
+          <input type="password" name="oldPassword" class="form-control" placeholder="Your password" disabled>
+          <label for="newPassword1">New password: </label>
+          <input type="password" name="newPassword1" class="form-control" placeholder="Your new password" disabled>
+          <label for="newPassword2">Repeat the new password: </label>
+          <input type="password" name="newPassword2" class="form-control" placeholder="Repeat your new password" disabled>
+          <input type="hidden" name="password" value="true">
+          <br>
+          <button class="btn btn-default" id="password" type="button" name="Edit" value="true">Edit</button>
+          <span class="btn btn-danger" type="hidden" id="cancelPassword">Cancel</span>
+        </form>
+      </div>
+    </div>
   </div>
 <% include ../footer %>
 

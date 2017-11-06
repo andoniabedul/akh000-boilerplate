@@ -16,6 +16,26 @@ const expressValidator = require('express-validator');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const Client = require('../model/client');
+const multer = require('multer');
+
+const imgExtension = ['.JPG', '.PNG', '.JPEG'];
+const fileExtensionPatter = /\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/;
+let storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    let extension = file.originalname.match(fileExtensionPatter)[0].toUpperCase();
+    if(imgExtension.includes(extension)){
+      callback(null, './public/images/');
+    }
+  },
+  filename: function (req, file, callback) {
+    let extension = file.originalname.match(fileExtensionPatter)[0].toUpperCase();
+    if(imgExtension.includes(extension)){
+      callback(null, 'IMAGE_'+ file.fieldname.toUpperCase() + '_' + Date.now() + extension);
+    }
+  }
+});
+
+let uploadProfilePhoto = multer({ storage : storage}).single('userPhoto');
 
 module.exports = {
   getUsers: function(req, res){
@@ -175,7 +195,7 @@ module.exports = {
       }
       req.logIn(user, function(err) {
         if (err) { return next(err); }
-        return res.redirect('/users/profile');
+        return res.redirect('/');
       });
     })(req, res, next);
   },
@@ -215,7 +235,6 @@ module.exports = {
             console.log("Error: " + err);
           } else {
             if(isMatch){
-              console.log("El password coincide");
               User.updatePassword(req.user, newPassword, function(err,updated){
                 if(err){
                   console.log("Error updating password: " + err);
@@ -236,6 +255,17 @@ module.exports = {
         });
       }
     }
+  },
+  postProfilePhoto: function(req, res){
+    uploadProfilePhoto(req, res, function(err){
+      if(err) return res.render('users/profile', {error_msg: err})
+      else {
+        let filepath = req.file.destination + req.file.filename;
+        User.changeProfilePhoto(req.user, filepath, function(err, user){
+          res.render('users/profile', {user: user, success_msg: 'Foto cambiada exitosamente'})
+        });
+      }
+    })
   },
   getLogout: function(req, res){
     req.logout();

@@ -1,11 +1,18 @@
 <% include ../layout %>
 <div class="col-md-3 filebar">
-    <h4> Cliente: <%=client.name%> </h4>
+    <h4> Cliente: <a href="/clients/<%= client._id%>"> <%=client.name%> </a></h4>
     <h5> Proyecto: <%= project.name %> </h5>
-    <span> <%=client.domainEmail%> </span>
-    <hr>
-    <p> <%= project.desc %> </p>
     <p id="projectDate"></p>
+    <p> Descripción: <%= project.desc %> </p>
+    <br>
+    <div style="margin-right: 30%; margin-left: 30%">
+      <a href="<%= client.template %>" download>
+         <button type="button" name="button" class="btn btn-success">
+           <i class="fa fa-cloud-download" aria-hidden="true"></i> Plantilla </button>
+      </a>
+    </div>
+    <hr style="border: 1px solid #F17300">
+    <p> Dominio de correo: <span class="specialLabel"> <%=client.domainEmail%> </span></p>
 </div>
 <div class="col-md-9">
   <div class="container-fluid">
@@ -13,7 +20,7 @@
         <% if(actualPath.length === 1) {%>
           <div class="col-md-12">
             <h4>
-                <a href="/clients/<%=client._id%>/projects/<%=project._id%>/project"> <i class="fa fa-home fa-2"></i> </a>
+                <a href="/clients/<%=client._id%>/projects/<%=project._id%>/project"><i class="fa fa-home fa-2"></i> Inicio </a>
             </h4>
           </div>
         <% } else { %>
@@ -22,13 +29,13 @@
               <% for(var i=0; i < actualPath.length; i++){ %>
                 <% if(i===0) { %>
                   <a href="/clients/<%=client._id%>/projects/<%=project._id%>/project">
-                   <i class="fa fa-home fa-2"></i>
+                   <i class="fa fa-home fa-2"></i> Inicio
                   </a>
-                  <i class="fa fa-arrow-right"></i>
+                  <i class="fa fa-caret-right"></i>
                 <% } else { %>
                   <a href="?path=<%= actualPath[i] %>"> <%= actualPath[i] %> </a>
                   <% if(i !== actualPath.length-1) {%>
-                    <i class="fa fa-arrow-right"></i>
+                    <i class="fa fa-caret-right"></i>
                   <% } %>
                 <% } %>
               <% } %>
@@ -65,7 +72,7 @@
                       <tr>
                         <td>
                           <a class="link" href="/documents/<%= dirs[i].name %>">
-                            <i class="fa fa-file"></i> <%= dirs[i].name %>
+                            <i class="fa fa-file"></i> <%= dirs[i].name.split('_')[0] %>
                           </a>
                         </td>
                         <td><%= dirs[i].size %></td>
@@ -82,43 +89,6 @@
         No existen archivos en este directorio por los momentos
       </tr>
     <% } %>
-      <!--
-      <div class="list-group-item">
-        <a class="link" href="#">
-            <h4 class="list-group-item-heading">
-              <i class="fa fa-folder"></i> Planificacion
-            </h4>
-        </a>
-      </div>
-      <div class="list-group-item">
-        <a class="link" href="#">
-            <h4 class="list-group-item-heading">
-              <i class="fa fa-folder"></i> Ejecución
-            </h4>
-        </a>
-      </div>
-      <div class="list-group-item">
-        <a class="link" href="#">
-            <h4 class="list-group-item-heading">
-              <i class="fa fa-folder"></i> Seguimiento y Control
-            </h4>
-        </a>
-      </div>
-      <div class="list-group-item">
-        <a class="link" href="#">
-            <h4 class="list-group-item-heading">
-              <i class="fa fa-folder"></i> Trancisión
-            </h4>
-        </a>
-      </div>
-      <div class="list-group-item">
-        <a class="link" href="#">
-            <h4 class="list-group-item-heading">
-              <i class="fa fa-folder"></i> Otros
-            </h4>
-        </a>
-      </div>
-      -->
   </div>
 </div>
 <!-- Modal -->
@@ -132,12 +102,8 @@
         <h4 class="modal-title">Subir documento en <%= actualPath[actualPath.length-1] %></h4>
       </div>
       <div class="modal-body">
-        <form action="/file-upload" class="dropzone" id="dropFile">
-
+        <form action="/documents/new?client=<%= client.name %>&project=<%= project.name %>&actualPath=<%= pathFolder %>&clientId=<%=client._id%>&projectId=<%= project._id %>" method="POST" class="dropzone" id="dropFile">
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
 
@@ -146,16 +112,12 @@
 <script type="text/javascript">
   $(document).ready(function(){
     let projectDate = "<%= project.created_at %>";
-    $('#projectDate').html(moment(projectDate).format('DD/MM/YYYY'));
-    
+    $('#projectDate').html("Fecha de creación: " + moment(projectDate).format('DD/MM/YYYY'));
     Dropzone.options.dropFile = {
-      paramName: "document", // The name that will be used to transfer the file
-      clickable : true,
-      uploadMultiple :false,
-      addRemoveLinks:true,
-      dictDefaultMessage="Hey Yo"
+      paramName: "document",
+      clickable : false,
+      uploadMultiple :false
     };
-
   });
 </script>
 <% include ../footer %>

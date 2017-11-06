@@ -1,24 +1,29 @@
-<% include ../../layout %>
-<div class="container">
-  <h3>Crear proyecto</h3>
-  <form action="/admin/clients/<%=client._id%>/projects/new" method="post">
-    <div class="form-group normalForm">
-      <label for="name">Nombre </label>
-      <input type="text" name="name" placeholder="" class="form-control">
-      <div class="form-group">
-       <label class="checkbox-inline"for="role">Rol</label>
-       <br>
-       <input type="checkbox" name="roles" value="specialist">Especialista</input>
-       <input type="checkbox" name="roles" value="manager">Gerente</input>
-       <input type="checkbox" name="roles" value="admin">Administrador</input>
-      </div>
-      <label for="address">Descripción </label>
-      <input type="text" name="desc" placeholder="" class="form-control">
+<form action="/admin/clients/<%=client._id%>/projects/new" method="post">
+  <div class="form-group normalForm">
+    <label for="name">Nombre </label>
+    <input type="text" name="name" placeholder="" class="form-control">
+    <div class="form-group">
+     <label class="checkbox-inline"for="role">Rol</label>
+     <br>
+     <br>
+     <input type="checkbox" id="specialist" name="roles" value="specialist" />
+     <label for="specialist">
+       <span></span>Especialista
+     </label>
+
+     <input type="checkbox" id="manager" name="roles" value="manager"/>
+     <label for="manager">
+       <span></span>Gerente
+     </label>
+
+     <input type="checkbox" id="admin" name="roles" value="admin"/>
+     <label for="admin">
+       <span></span>Administrador
+     </label>
     </div>
-    <button type="submit" class="btn btn-success" name="button">Crear</button>
-    <a href="/">
-      <button type="button" class="btn btn-primary" name="button">Cancelar</button>
-    </a>
-  </form>
-</div>
-<% include ../../footer %>
+    <label for="address">Descripción </label>
+    <input type="text" name="desc" placeholder="" class="form-control">
+  </div>
+  <hr>
+  <button type="submit" class="btn btn-success" name="button">Crear</button>
+</form>

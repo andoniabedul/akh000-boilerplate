@@ -4,26 +4,53 @@
   <hr>
   <div class="col-md-6">
     <div class="list-group">
-      <div class="list-group-item">
-        <a class="link" href="/admin/clients">
-            <h4 class="list-group-item-heading">
-              <i class="fa fa-address-card"></i> CLIENTES
-            </h4>
-        </a>
-      </div>
+      <h4>Clientes
+        <button class="btn btn-success pull-right" data-toggle="modal" data-target="#addClientModal">
+          +
+        </button>
+      </h4>
+      <hr>
+      <% for(var i = 0; i < clients.length; i++){ %>
+        <div class="list-group-item">
+          <a class="link" href="/clients/<%= clients[i]._id %>">
+              <h5 class="list-group-item-heading">
+                <i class="fa fa-address-card"></i> <%= clients[i].name %>
+              </h5>
+          </a>
+        </div>
+      <% } %>
     </div>
   </div>
   <div class="col-md-6">
     <div class="list-group">
-      <div class="list-group-item">
-        <a class="link" href="/admin/users">
-            <h4 class="list-group-item-heading">
-              <i class="fa fa-users"></i> USUARIOS
-            </h4>
-        </a>
-      </div>
+      <h4>Usuarios</h4>
+      <hr>
+      <% for(var j = 0; j < users.length; j++) { %>
+        <div class="list-group-item">
+          <a href="/admin/users/<%= users[j].username %>/user"
+              <h4 class="list-group-item-heading">
+                <%= users[j].name %>
+              </h4>
+              <p class="list-group-item-text">
+                <%= users[j].role %>
+              </p>
+        </div>
+      <% } %>
     </div>
   </div>
 </div>
+</div>
+<div id="addClientModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Agregar nuevo cliente</h4>
+      </div>
+      <div class="modal-body">
+        <% include ../admin/clients/new %>
+      </div>
+    </div>
+  </div>
 </div>
 <% include ../footer %>

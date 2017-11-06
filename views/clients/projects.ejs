@@ -2,7 +2,9 @@
 <div class="container">
   <h3> Proyectos de <%= client.name %>
     <% if(user.role==='admin') { %>
-      <a href="/admin/clients/<%= client._id %>/projects/new"> + </a>
+      <button class="btn btn-success" data-toggle="modal" data-target="#myModal">
+        +
+      </button>
     <% } %>
   </h3>
   <hr>
@@ -12,8 +14,27 @@
           <h4 class="list-group-item-heading">
             <i class="fa fa-tasks"></i> <%= projects[i].name %>
           </h4>
+          <p class="list-group-item-text">
+            <span><%= projects[i].desc %></span>
+            <span class="pull-right"><%= projects[i].created_at %></span>
+          </p>
       </a>
     </div>
   <% } %>
 </div>
+<% if(user.role === 'admin') { %>
+  <div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Agregar nuevo proyecto a <%= client.name %></h4>
+        </div>
+        <div class="modal-body">
+          <% include ../admin/clients/new_project %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } %>
 <% include ../footer %>
