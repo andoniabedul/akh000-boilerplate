@@ -53,7 +53,7 @@
                       <% } %>
                     </h4>
                     <p class="list-group-item-text">
-                      <%= documents[j].created_at %>
+                      <i class="fa fa-calendar"></i> <%= documents[j].created_at.toString().substring(0, 15)  %>
                     </p>
                 </a>
               </div>
@@ -64,19 +64,5 @@
         <% } %>
       </div>
     </div>
-  <!--
-    <div class="list-group">
-      <% for(var i = 0; i < clients.length; i++) { %>
-        <div class="list-group-item">
-              <h4 class="list-group-item-heading">
-                <%= clients[i].name %>
-              </h4>
-              <p class="list-group-item-text">
-                <%= clients[i].desc %>
-              </p>
-        </div>
-      <% } %>
-    </div>
-  -->
 </div>
 <% include ./footer %>
