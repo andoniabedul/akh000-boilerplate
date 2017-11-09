@@ -9,7 +9,7 @@ var UserSchema = mongoose.Schema({
     password: {type: String, required: true}, // PASSWORD
     email: {type: String, required: true}, // USER EMAIL
     role: {type: String, required: true, enum: ['specialist', 'manager', 'admin'], default: 'specialist'},
-    status: {verified:{type: Boolean, default: false}, token: String}, // VERIFY EMAIL
+    status: {verified:{type: Boolean, default: false}, token: {type: String}}, // VERIFY EMAIL
     resetPasswordToken: {type: String},
     resetPasswordExpires: {type: Date},
     name: {type: String},
@@ -84,6 +84,14 @@ module.exports.getUserById = function(id,callback){
   User.findById(id, callback);
 };
 
+module.exports.getUsersById = function(usersId, callback){
+  User.find({_id: {$in: usersId}}, function(err, users){
+    if(err) callback(err, null);
+    else {
+      callback(null, users);
+    }
+  });
+}
 module.exports.comparePasswords = function(password, hash, callback){
   bcrypt.compare(password,hash,function(err,isMatch){
     if (err) {

@@ -142,7 +142,6 @@ module.exports = {
     req.checkBody('name', 'Name cant be empty').notEmpty();
     req.checkBody('lastname', 'Lastname cant be empty').notEmpty();
 
-    // OPTIONAL TO-DO: RENDER ALL FIELDS WHERE DONT EXIST ERRORS TO THE FORM
     let errors = req.validationErrors();
     if (errors) {
       res.render('admin/users/create', {errors: errors});
@@ -157,15 +156,17 @@ module.exports = {
               password: password1,
               working_on: working_on,
               email: email,
+              role: role,
               name: name,
               lastname: lastname,
               phone: phone
             })
             User.create(newUser, function(err,user){
               if(err){
-                console.log("Error creating user: " + err);
+                res.render('error', {error: err})
+              } else {
+                res.redirect('/admin/users');
               }
-              res.redirect('/admin/users');
             });
           } else {
             res.render('admin/users/create', {
@@ -192,11 +193,12 @@ module.exports = {
       if (err) { return next(err) }
       if (!user) {
         return res.render('users/login', {username: '', error_msg: info.error_msg})
-      }
-      req.logIn(user, function(err) {
-        if (err) { return next(err); }
-        return res.redirect('/');
-      });
+      } else {
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          return res.redirect('/');
+        });
+      }  
     })(req, res, next);
   },
   getProfile: function(req,res){

@@ -32,6 +32,36 @@
       <div class="col-md-6">
         <h4>Ultimos documentos subidos</h4>
         <hr>
+        <% if(documents.length > 0 ) { %>
+          <div class="list-group">
+            <% for(var j = 0; j < documents.length; j++) { %>
+              <div class="list-group-item">
+                <a href="/documents/<%= documents[j].query%>">
+                    <h4 class="list-group-item-heading">
+                      <% if(documents[j].extension === '.PDF') { %>
+                        <i class="fa fa-file-pdf-o"></i>
+                        <%= documents[j].name %>
+                      <% } else if(documents[j].extension === '.DOCX' || documents[j].extension === '.DOC'){ %>
+                        <i class="fa fa-file-word-o"></i>
+                        <%= documents[j].name %>
+                      <% } else if(documents[j].extension === '.PPTX' || documents[j].extension === '.PPT'){ %>
+                        <i class="fa fa-file-excel-o"></i>
+                        <%= documents[j].name %>
+                      <% } else if(documents[j].extension === '.XLSX' || documents[j].extension === '.XLS'){ %>
+                        <i class="fa fa-file-powerpoint-o"></i>
+                        <%= documents[j].name %>
+                      <% } %>
+                    </h4>
+                    <p class="list-group-item-text">
+                      <%= documents[j].created_at %>
+                    </p>
+                </a>
+              </div>
+            <% } %>
+          </div>
+        <% } else { %>
+          <p>Aun no has subido ningún documento</p>
+        <% } %>
       </div>
     </div>
   <!--

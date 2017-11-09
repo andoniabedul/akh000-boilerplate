@@ -22,6 +22,7 @@ const serialize = function(user, done){
     username: user.username,
     email: user.email, // USER EMAIL
     role: user.role,
+    photo: user.photo,
     working_on: user.working_on
   };
   done(null, SerializedUser);
@@ -33,6 +34,7 @@ module.exports.serializeUser = function(user, done){
     username: user.username,
     email: user.email, // USER EMAIL
     role: user.role,
+    photo: user.photo,
     working_on: user.working_on
   };
   done(null, SerializedUser);
@@ -78,6 +80,7 @@ passport.serializeUser(function(user, done) {
     username: user.username,
     email: user.email, // USER EMAIL
     role: user.role,
+    photo: user.photo,
     working_on: user.working_on
   };
   done(null, SerializedUser);

@@ -8,6 +8,7 @@ const User = require('../model/user');
 const expressValidator = require('express-validator');
 const Client = require('../model/client');
 const Document = require('../model/document');
+const Comment = require('../model/comment');
 const multer = require('multer');
 const imgExtension = ['.JPG', '.PNG', '.JPEG']
 const docExtension = ['.PDF', '.DOC', '.DOCX', '.XLS','.XLSX','.PPT', '.PPTX'];
@@ -34,7 +35,7 @@ let storage =  multer.diskStorage({
         let newDoc = new Object();
         newDoc.name = file.originalname.substr(0, file.originalname.lastIndexOf('.')) || file.originalname;
         newDoc.extension = extension;
-        newDoc.path = `${client}/${project}/${actualPath}`;
+        newDoc.path = `${client}/${project}${actualPath}`;
         newDoc.client_id = req.query.clientId;
         newDoc.project_id = req.query.projectId;
         Document.create(newDoc, req.user._id, function(err, doc){
@@ -67,10 +68,20 @@ let uploadDocument = multer({storage: storage}).single('file');
            }).filter((project)=>{
              return project._id.toString() === doc.project_id.toString();
            })[0];
-           res.render('documents/index', {document: doc, client: client, project: project});
+           Comment.listByDocument(doc._id.toString(), function(err, comments){
+             if(err) return res.render('error', {error: err});
+             else {
+               console.log(JSON.stringify(comments));
+               User.findById(doc.created_by.toString(), function(err, userCreator){
+                 if(err) return res.render('error', {error: err})
+                 else {
+                   res.render('documents/index', {document: doc, comments: comments, creator: userCreator, client: client, project: project});
+                 }
+               });
+             }
+           });
          }
        });
-
      });
    },
    postDocument: function(req, res){
@@ -80,5 +91,35 @@ let uploadDocument = multer({storage: storage}).single('file');
          res.redirect('/clients');
        }
      });
+   },
+   postComment: function(req, res){
+     req.checkBody('comment','El comentario es requerido').notEmpty();
+     let errors = req.validationErrors();
+     if (errors) {
+       res.render('error', {error: errors});
+     } else {
+       let newComment = new Object();
+       newComment.desc = req.body.comment;
+       newComment.created_by = {};
+       newComment.created_by._id = req.user._id.toString();
+       newComment.created_by.username = req.user.username;
+       newComment.created_by.photo = req.user.photo;
+       newComment.document_id = req.body.document_id;
+       Document.findById(newComment.document_id, function(err, doc){
+         if(err) return res.render('error', {error: err})
+         else {
+           Comment.create(newComment, function(err, comment){
+             if(err) return res.render('error', {error: err})
+             else {
+               res.redirect('/documents/'+doc.query);
+             }
+           });
+         }
+       });
+
+     }
+   },
+   postModifyDocument: function(req, res){
+     
    }
  }

@@ -1,12 +1,12 @@
 <% include ../layout %>
 <div class="container">
-  <h3>Admin site</h3>
+  <h3>Módulo de administración</h3>
   <hr>
   <div class="col-md-6">
     <div class="list-group">
       <h4>Clientes
         <button class="btn btn-success pull-right" data-toggle="modal" data-target="#addClientModal">
-          +
+          <i class="fa fa-plus-circle" aria-hidden="true"></i>
         </button>
       </h4>
       <hr>
@@ -23,7 +23,13 @@
   </div>
   <div class="col-md-6">
     <div class="list-group">
-      <h4>Usuarios</h4>
+      <h4>Usuarios
+        <a href="/admin/users/create">
+          <button class="btn btn-success pull-right">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+          </button>
+        </a>
+      </h4>
       <hr>
       <% for(var j = 0; j < users.length; j++) { %>
         <div class="list-group-item">
@@ -34,6 +40,7 @@
               <p class="list-group-item-text">
                 <%= users[j].role %>
               </p>
+          </a>
         </div>
       <% } %>
     </div>

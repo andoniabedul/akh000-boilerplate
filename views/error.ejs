@@ -1,3 +1,49 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script language="javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script language="javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/bower_components/dropzone/dropzone.js"></script>
+    <script src="/javascripts/moment.js"></script>
+    <script href="/javascripts/main.js"></script>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/bower_components/dropzone/dropzone.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <title> DOCHUB </title>
+  </head>
+  <body>
+    <div class="navbar navbar-default">
+      <div class="navbar-header">
+        <a class="navbar-left" href="/">
+          <img src="/images/logo_pranical.png" class="logo img-responsive" alt="">
+        </a>
+        <button class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <ul class="nav navbar-nav navbar-collapse collapse pull-right" id="menu">
+        <li class="menuDate"><div id="textDate"><i class="fa fa-calendar" aria-hidden="true"></i></div></li>
+      </ul>
+    </div>
+    <div class="container-fluid">
+      <div class="row wrapper">
+      <h1>Oh, oh... parece que ha ocurrido algo que no debería :(</h1>
+      <p>Por favor enviar todo el texto que aparezca abajo al administrador del sitio</p>
+      <h2><%= message %></h2>
+      <h3><%= error.status %></h3>
+      <pre><%= error.stack %></pre>
+      </div>
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('#textDate').html('<i class="fa fa-calendar"></i> '+moment().format('LLL'));
+      });
+    </script>
+  </body>
+</html>

@@ -20,7 +20,7 @@
         <% if(actualPath.length === 1) {%>
           <div class="col-md-12">
             <h4>
-                <a href="/clients/<%=client._id%>/projects/<%=project._id%>/project"><i class="fa fa-home fa-2"></i> Inicio </a>
+                <a href="/clients/<%=client._id%>/projects/<%=project._id%>/project"><i class="fa fa-home fa-2"></i> <%= project.name %> </a>
             </h4>
           </div>
         <% } else { %>
@@ -29,7 +29,7 @@
               <% for(var i=0; i < actualPath.length; i++){ %>
                 <% if(i===0) { %>
                   <a href="/clients/<%=client._id%>/projects/<%=project._id%>/project">
-                   <i class="fa fa-home fa-2"></i> Inicio
+                   <i class="fa fa-home fa-2"></i> <%= project.name %>
                   </a>
                   <i class="fa fa-caret-right"></i>
                 <% } else { %>
@@ -59,6 +59,7 @@
             <tbody>
             <% for(var i=0; i < dirs.length; i++) { %>
               <% if(dirs[i].folder) {%>
+
                       <tr>
                         <td>
                           <a class="link" href="?path=<%=dirs[i].path%>">
@@ -72,7 +73,22 @@
                       <tr>
                         <td>
                           <a class="link" href="/documents/<%= dirs[i].name %>">
-                            <i class="fa fa-file"></i> <%= dirs[i].name.split('_')[0] %>
+                            <% if(dirs[i].name.split('.').pop() === 'PDF') { %>
+                              <i class="fa fa-file-pdf-o"></i>
+                              <%= dirs[i].name.split('_')[0] %>
+                            <% } else if(dirs[i].name.split('.').pop() === 'DOCX' || dirs[i].name.split('.').pop() === 'DOC'){ %>
+                              <i class="fa fa-file-word-o"></i>
+                              <%= dirs[i].name.split('_')[0] %>
+                            <% } else if(dirs[i].name.split('.').pop() === 'PPTX' || dirs[i].name.split('.').pop() === 'PPT'){ %>
+                              <i class="fa fa-file-powerpoint-o"></i>
+                              <%= dirs[i].name.split('_')[0] %>
+                            <% } else if(dirs[i].name.split('.').pop() === 'XLSX' || dirs[i].name.split('.').pop() === 'XLS'){ %>
+                              <i class="fa fa-file-excel-o"></i>
+                              <%= dirs[i].name.split('_')[0] %>
+                            <% } else { %>
+                              <i class="fa fa-file"></i>
+                              <%= dirs[i].name.split('_')[0] %>
+                            <% } %>
                           </a>
                         </td>
                         <td><%= dirs[i].size %></td>

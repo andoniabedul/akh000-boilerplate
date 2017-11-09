@@ -7,6 +7,7 @@
 const User = require('../model/user');
 const expressValidator = require('express-validator');
 const Client = require('../model/client');
+const Document = require('../model/document');
 
  module.exports = {
    getIndex: function (req, res) {
@@ -14,13 +15,23 @@ const Client = require('../model/client');
        Client.listClients(function(err, clients){
          if(err) return res.render('error', {error: err})
          else {
-           res.render('index', {clients: clients});
+           Document.lastUploadedByUser(req.user._id.toString(), function(err, docs){
+             if(err) return res.render('error', {error: err})
+             else {
+               res.render('index', {clients: clients, documents: docs});
+             }
+           });
          }
        });
      } else {
        Client.findClientsById(req.user.working_on,function(err, clients){
          if(err) res.render('error', {error:err});
-         res.render('index', {clients: clients});
+         Document.lastUploadedByUser(req.user._id.toString(), function(err, docs){
+           if(err) return res.render('error', {error: err})
+           else {
+             res.render('index', {clients: clients, documents: docs});
+           }
+         });
        });
      }
    },
